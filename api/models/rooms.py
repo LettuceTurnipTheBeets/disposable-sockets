@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from api.choices import DURATION_CHOICES
 
 class Room(models.Model):
-    """Announcement model"""
+    """
+    Announcement model
+    """
     code = models.CharField(max_length=4, blank=False)
     description = models.TextField(blank=True)
     admin = models.CharField(max_length=20, blank=False)
