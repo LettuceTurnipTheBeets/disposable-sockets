@@ -5,7 +5,7 @@ from rest_framework import serializers, viewsets
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Room
-        fields = ('code', 'url', 'description', 'admin', 'date_created', 'duration', 'date_expires', 'name')
+        fields = ('code', 'url', 'description', 'admin', 'created', 'expires', 'name')
 
         
 class RoomViewSet(viewsets.ModelViewSet):
