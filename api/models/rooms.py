@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
-from room.choices import DURATION_CHOICES
+from api.choices import DURATION_CHOICES
 
 class Room(models.Model):
     """Announcement model"""

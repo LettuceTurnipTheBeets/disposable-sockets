@@ -1,4 +1,4 @@
-from room.models.rooms import Room
+from api.models.rooms import Room
 from rest_framework import serializers, viewsets
 
 

@@ -8,7 +8,7 @@ sys.path.append('..')
 """
 Viewsets
 """
-from room.viewsets.rooms import RoomViewSet
+from api.viewsets.rooms import RoomViewSet
 
 """
 Automatically determine the URL conf
