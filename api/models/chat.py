@@ -12,4 +12,4 @@ class Chat(models.Model):
     time = models.DateTimeField(default=datetime.now())
     
     class Meta:
-        ordering = ('time',)
+        ordering = ('-time',)
