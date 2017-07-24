@@ -17,6 +17,7 @@ router = routers.DefaultRouter()
 router.register(r'room', RoomViewSet)
 
 urlpatterns = [
+    #url(r'^$', views.index, name='index'),
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),

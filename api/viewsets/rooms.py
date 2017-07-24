@@ -9,14 +9,14 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = (
-            'code',
-            'url',
-            'description',
             'admin',
             'chat',
+            'code',
             'created',
+            'description',
             'expires',
             'name',
+            'url',
         )
 
         

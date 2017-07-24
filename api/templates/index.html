@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+Enter in your name and we'll create a room for you for 24 hours.
+
+    <form action="/" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save"/>
+    </form>
+
+
+{% endblock %}
