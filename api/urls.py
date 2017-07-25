@@ -18,6 +18,7 @@ router.register(r'room', RoomViewSet)
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^join/$', views.join), 
     #url(r'^(?P<room_id>[0-9]+)/$', views.room, name='room'),
     url(r'^(?P<room_url>[a-zA-Z0-9]{10})/$', views.room),
     url(r'^about/', views.about, name='about'),

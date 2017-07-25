@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 import random
-from .forms import RoomForm
+from .forms import RoomForm, CodeForm
 from api.models.rooms import Room
 from datetime import datetime, timedelta
 
@@ -10,12 +10,13 @@ from datetime import datetime, timedelta
 Index/Home/Landing Page
 """
 def index(request):
+    code_form = CodeForm()
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = RoomForm(request.POST)
+        room_form = RoomForm(request.POST)
         # check whether it's valid:
-        if form.is_valid():
+        if room_form.is_valid():
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
@@ -34,22 +35,46 @@ def index(request):
                 next_index = random.randrange(len(url_alphabet))
                 url = url + url_alphabet[next_index]
             
-            Room.objects.create(
-                admin=form.cleaned_data['username'],
-                name=form.cleaned_data['room_name'],
+            obj = Room.objects.create(
+                admin=room_form.cleaned_data['username'],
+                name=room_form.cleaned_data['room_name'],
                 code=room_code,
                 url=url,
             )
 
             print (room_code)
             print (url)
+            return redirect('/{}/'.format(obj.url))
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = RoomForm()
+        room_form = RoomForm()
 
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form})
 
+"""
+Join Endpoint
+"""
+def join(request):
+    room_form = RoomForm()
+
+    if request.method == 'POST':
+        code_form = CodeForm(request.POST)
+        
+        if code_form.is_valid():
+            try:
+                room = Room.objects.all().filter(code=code_form.cleaned_data['code'])[0]
+            except:
+                raise Http404
+                # reload index
+            
+            return redirect('/{}/'.format(room.url))
+    else:
+        code_form  = CodeForm()
+
+    return render(request, 'index.html', {'code_form': code_form, 'room_form': room_form})
+
+    
 """
 About Page
 """
