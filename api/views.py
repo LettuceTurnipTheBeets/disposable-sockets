@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 import random
 from .forms import RoomForm
 from api.models.rooms import Room
 from datetime import datetime, timedelta
+
 
 """
 Index/Home/Landing Page
@@ -58,5 +59,10 @@ def about(request):
 """
 Room Detail Page
 """
-def room(request, room_id):
-    return HttpResponse("ID:    {}\nURL:    {}\nName:    {}".format(room_id, 'test', 'test'))
+def room(request, room_url):
+    try:
+        room = Room.objects.all().filter(url=room_url)[0]
+    except IndexError:
+        raise Http404
+    
+    return HttpResponse("ID: {}<br>URL: {}<br>Name: {}".format(room.id, room.url, room.name))
