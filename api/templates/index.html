@@ -2,13 +2,18 @@
 
 {% block content %}
 
-Enter in your name and we'll create a room for you for 24 hours.
+<h1>Index</h1>
+
+Enter in your name and we'll create a room for you for 24 hours.<br>
 
     <form action="/" method="POST">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save"/>
+        <input type="submit" value="Create"/>
     </form>
 
+    <ul>
+        <li><a href="/about/">About</a></li>
+    </ul>
 
 {% endblock %}
