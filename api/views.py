@@ -68,7 +68,7 @@ def join(request):
                 raise Http404
                 # reload index
             
-            if 'room_session' in request.COOKIES:            
+            if room.code in request.COOKIES:            
                 return redirect('/{}/'.format(room.url))
             else:
                 #return redirect('/registration/?room={}'.format(room.code))
@@ -93,7 +93,7 @@ def registration(request):
             room = Room.objects.all().filter(code=room_code)[0]
 
             response = redirect('/{}/'.format(room.url))
-            response.set_cookie('room_session', form.cleaned_data['name'], max_age=300)
+            response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
             
             return response
 
@@ -120,8 +120,8 @@ def room(request, room_url):
     except IndexError:
         raise Http404
 
-    if 'room_session' in request.COOKIES:
-        name = request.COOKIES.get('room_session')
+    if room.code in request.COOKIES:
+        name = request.COOKIES.get(room.code)
 
     return render(request, 'room.html', {'room': room, 'name': name})    
 
