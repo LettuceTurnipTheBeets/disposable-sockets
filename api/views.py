@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 import random
-from .forms import RoomForm, CodeForm
+from .forms import RoomForm, CodeForm, NameForm
 from api.models.rooms import Room
 from datetime import datetime, timedelta
 
@@ -68,13 +68,43 @@ def join(request):
                 raise Http404
                 # reload index
             
-            return redirect('/{}/'.format(room.url))
+            if 'room_session' in request.COOKIES:            
+                return redirect('/{}/'.format(room.url))
+            else:
+                #return redirect('/registration/?room={}'.format(room.code))
+                return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
     else:
         code_form  = CodeForm()
 
     return render(request, 'index.html', {'code_form': code_form, 'room_form': room_form})
 
+"""
+Registration Page
+"""
+def registration(request):
+    #room_code = request.GET.get('room')
     
+    if request.method == 'POST':
+        form = NameForm(request.POST)
+        room_code  = request.POST.get('room_code')
+        print(room_code)
+
+        if form.is_valid():
+            room = Room.objects.all().filter(code=room_code)[0]
+
+            response = redirect('/{}/'.format(room.url))
+            response.set_cookie('room_session', form.cleaned_data['name'], max_age=300)
+            
+            return response
+
+        else:
+            return redirect('/registration/')
+
+    else:
+        form = NameForm() 
+  
+    return render(request, 'registration.html', {'form': form})  
+
 """
 About Page
 """
@@ -89,5 +119,9 @@ def room(request, room_url):
         room = Room.objects.all().filter(url=room_url)[0]
     except IndexError:
         raise Http404
-    
-    return HttpResponse("ID: {}<br>URL: {}<br>Name: {}".format(room.id, room.url, room.name))
+
+    if 'room_session' in request.COOKIES:
+        name = request.COOKIES.get('room_session')
+
+    return render(request, 'room.html', {'room': room, 'name': name})    
+

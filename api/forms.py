@@ -6,3 +6,6 @@ class RoomForm(forms.Form):
 
 class CodeForm(forms.Form):
     code = forms.CharField(min_length=4, max_length=4, required=True, label='Room Code')
+
+class NameForm(forms.Form):
+    name = forms.CharField(min_length=1, max_length=20, required=True, label='Name')
