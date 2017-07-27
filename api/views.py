@@ -20,20 +20,35 @@ def index(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
+
+            room_condition = True 
             room_alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            url_alphabet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             room_length = 4
+
+            while room_condition:
+                room_code = ""
+                
+                for i in range(room_length):
+                    next_index = random.randrange(len(room_alphabet))
+                    room_code = room_code + room_alphabet[next_index]
+
+                """
+                Check that the room code is unique.
+                I'm querying the database every time because it may change
+                """
+                room_condition = len(Room.objects.all().filter(code=room_code)) > 0            
+            url_condition = True
+            url_alphabet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             url_length = 10
-            room_code = ""
-            url = ""
+            
+            while url_condition:
+                url = ""
 
-            for i in range(room_length):
-                next_index = random.randrange(len(room_alphabet))
-                room_code = room_code + room_alphabet[next_index]
+                for i in range(url_length):
+                    next_index = random.randrange(len(url_alphabet))
+                    url = url + url_alphabet[next_index]
 
-            for i in range(url_length):
-                next_index = random.randrange(len(url_alphabet))
-                url = url + url_alphabet[next_index]
+                url_condition = len(Room.objects.all().filter(url=url)) > 0
             
             obj = Room.objects.create(
                 admin=room_form.cleaned_data['username'],
