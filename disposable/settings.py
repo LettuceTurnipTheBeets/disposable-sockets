@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'api',
     'rest_framework',
+    'django_crontab',
 ]
 
 REST_FRAMEWORK = {
@@ -54,6 +55,10 @@ REST_FRAMEWORK = {
     ],
     'PAGE_SIZE': 10,
 }
+
+CRONJOBS = [
+    ('*/15 * * * *', 'api.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
