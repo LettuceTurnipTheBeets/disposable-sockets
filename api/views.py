@@ -59,7 +59,11 @@ def index(request):
 
             print (room_code)
             print (url)
-            return redirect('/{}/'.format(obj.url))
+
+            response = redirect('/{}'.format(obj.url))
+            response.set_cookie(obj.code, obj.admin, max_age=300)
+       
+            return response
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -137,6 +141,8 @@ def room(request, room_url):
 
     if room.code in request.COOKIES:
         name = request.COOKIES.get(room.code)
+    else:
+        return redirect('/')
 
     return render(request, 'room.html', {'room': room, 'name': name})    
 
