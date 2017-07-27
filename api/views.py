@@ -36,31 +36,16 @@ def index(request):
                 Check that the room code is unique.
                 I'm querying the database every time because it may change
                 """
-                room_condition = len(Room.objects.all().filter(code=room_code)) > 0            
-            url_condition = True
-            url_alphabet = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            url_length = 10
-            
-            while url_condition:
-                url = ""
-
-                for i in range(url_length):
-                    next_index = random.randrange(len(url_alphabet))
-                    url = url + url_alphabet[next_index]
-
-                url_condition = len(Room.objects.all().filter(url=url)) > 0
-            
+                room_condition = len(Room.objects.all().filter(code=room_code)) > 0                        
             obj = Room.objects.create(
                 admin=room_form.cleaned_data['username'],
                 name=room_form.cleaned_data['room_name'],
                 code=room_code,
-                url=url,
             )
 
             print (room_code)
-            print (url)
 
-            response = redirect('/{}'.format(obj.url))
+            response = redirect('/{}'.format(obj.code))
             response.set_cookie(obj.code, obj.admin, max_age=300)
        
             return response
@@ -88,7 +73,7 @@ def join(request):
                 # reload index
             
             if room.code in request.COOKIES:            
-                return redirect('/{}/'.format(room.url))
+                return redirect('/{}/'.format(room.code))
             else:
                 #return redirect('/registration/?room={}'.format(room.code))
                 return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
@@ -111,7 +96,7 @@ def registration(request):
         if form.is_valid():
             room = Room.objects.all().filter(code=room_code)[0]
 
-            response = redirect('/{}/'.format(room.url))
+            response = redirect('/{}/'.format(room.code))
             response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
             
             return response
@@ -133,11 +118,11 @@ def about(request):
 """
 Room Detail Page
 """
-def room(request, room_url):
+def room(request, room_code):
     try:
-        room = Room.objects.all().filter(url=room_url)[0]
+        room = Room.objects.all().filter(code=room_code)[0]
     except IndexError:
-        raise Http404
+        return redirect('/')
 
     if room.code in request.COOKIES:
         name = request.COOKIES.get(room.code)

@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^join/$', views.join),
     url(r'^registration/$', views.registration, name='registration'), 
     #url(r'^(?P<room_id>[0-9]+)/$', views.room, name='room'),
-    url(r'^(?P<room_url>[a-zA-Z0-9]{10})/$', views.room),
+    url(r'^(?P<room_code>[a-zA-Z]{4})/$', views.room),
     url(r'^about/', views.about, name='about'),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),

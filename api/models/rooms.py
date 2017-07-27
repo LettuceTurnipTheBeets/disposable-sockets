@@ -9,7 +9,7 @@ class Room(models.Model):
     code = models.CharField(max_length=4, blank=False)
     description = models.TextField(blank=True)
     admin = models.CharField(max_length=20, blank=False)
-    url = models.CharField(max_length=50, blank=False)
+    #url = models.CharField(max_length=50, blank=False)
     #url = models.URLField(max_length=50, blank=False) # null=True
     created = models.DateTimeField(default=datetime.now().replace(second=0, microsecond=0))
     #duration = models.DurationField()
