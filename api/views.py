@@ -17,10 +17,6 @@ def index(request):
         room_form = RoomForm(request.POST)
         # check whether it's valid:
         if room_form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-
             room_condition = True 
             room_alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             room_length = 4
@@ -34,7 +30,8 @@ def index(request):
 
                 """
                 Check that the room code is unique.
-                I'm querying the database every time because it may change
+                I'm querying the database every time because it may change before a 
+                successful code is generated.
                 """
                 room_condition = len(Room.objects.all().filter(code=room_code)) > 0                        
             obj = Room.objects.create(
@@ -85,9 +82,7 @@ def join(request):
 """
 Registration Page
 """
-def registration(request):
-    #room_code = request.GET.get('room')
-    
+def registration(request):  
     if request.method == 'POST':
         form = NameForm(request.POST)
         room_code  = request.POST.get('room_code')
@@ -122,12 +117,14 @@ def room(request, room_code):
     try:
         room = Room.objects.all().filter(code=room_code)[0]
     except IndexError:
-        return redirect('/')
+        #return redirect('/')
+        raise Http404
 
     if room.code in request.COOKIES:
         name = request.COOKIES.get(room.code)
     else:
-        return redirect('/')
+        #return redirect('/')
+        raise Http404
 
     return render(request, 'room.html', {'room': room, 'name': name})    
 

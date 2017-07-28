@@ -15,17 +15,5 @@ class CodeForm(forms.Form):
             self.add_error('code', 'No room exists with that code.')
         return cd
 
-    """def is_valid(self):
-        valid = super(CodeForm, self).is_valid()
-
-        if not valid:
-            return valid
-
-        if len(Room.objects.all().filter(code=self.cleaned_data['code'])) == 0:
-            self.add_error('no_room', 'No room exists with that code')
-            return False
- 
-        return True"""
-
 class NameForm(forms.Form):
     name = forms.CharField(min_length=1, max_length=20, required=True, label='Name')

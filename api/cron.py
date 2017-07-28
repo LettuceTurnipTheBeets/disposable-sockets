@@ -1,5 +1,4 @@
 from api.models.rooms import Room
-from datetime import datetime
 from django.utils import timezone
 
 
