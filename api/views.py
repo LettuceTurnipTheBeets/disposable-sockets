@@ -4,7 +4,7 @@ import random
 from .forms import RoomForm, CodeForm, NameForm
 from api.models.rooms import Room
 from datetime import datetime, timedelta
-
+from django.db import IntegrityError
 
 """
 Index/Home/Landing Page
@@ -33,12 +33,16 @@ def index(request):
                 I'm querying the database every time because it may change before a 
                 successful code is generated.
                 """
-                room_condition = len(Room.objects.all().filter(code=room_code)) > 0                        
-            obj = Room.objects.create(
-                admin=room_form.cleaned_data['username'],
-                name=room_form.cleaned_data['room_name'],
-                code=room_code,
-            )
+                                        
+                try:
+                    obj = Room.objects.create(
+                        admin=room_form.cleaned_data['username'],
+                        name=room_form.cleaned_data['room_name'],
+                        code=room_code,
+                    )
+                    room_condition = False
+                except IntegrityError:
+                    pass
 
             print (room_code)
 
@@ -64,7 +68,7 @@ def join(request):
         
         if code_form.is_valid():
             try:
-                room = Room.objects.all().filter(code=code_form.cleaned_data['code'])[0]
+                room = Room.objects.get(code=code_form.cleaned_data['code'])
             except:
                 raise Http404
                 # reload index
@@ -89,7 +93,7 @@ def registration(request):
         print(room_code)
 
         if form.is_valid():
-            room = Room.objects.all().filter(code=room_code)[0]
+            room = Room.objects.get(code=room_code)
 
             response = redirect('/{}/'.format(room.code))
             response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
@@ -115,7 +119,7 @@ Room Detail Page
 """
 def room(request, room_code):
     try:
-        room = Room.objects.all().filter(code=room_code)[0]
+        room = Room.objects.get(code=room_code)
     except IndexError:
         #return redirect('/')
         raise Http404
