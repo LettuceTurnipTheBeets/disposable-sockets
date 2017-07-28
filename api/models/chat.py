@@ -9,7 +9,7 @@ class Chat(models.Model):
     room = models.ForeignKey('api.Room', db_column='room_id', related_name='chat')
     name = models.CharField(max_length=40)
     message = models.TextField(max_length=140)
-    time = models.DateTimeField(default=datetime.now())
+    time = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ('-time',)
