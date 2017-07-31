@@ -121,13 +121,11 @@ def room(request, room_code):
     try:
         room = Room.objects.get(code=room_code)
     except IndexError:
-        #return redirect('/')
         raise Http404
 
     if room.code in request.COOKIES:
         name = request.COOKIES.get(room.code)
     else:
-        #return redirect('/')
         raise Http404
 
     return render(request, 'room.html', {'room': room, 'name': name})    

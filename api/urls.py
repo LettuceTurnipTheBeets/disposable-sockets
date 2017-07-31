@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^(?P<room_code>[a-zA-Z]{4})/$', views.room),
     url(r'^about/', views.about, name='about'),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
    # url(r'^', include('rest_framework.urls', namespace='rest_framework')),
 ]
