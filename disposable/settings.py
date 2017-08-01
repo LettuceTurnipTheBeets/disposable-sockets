@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'django_crontab',
+    'webpack_loader',
 ]
 
 REST_FRAMEWORK = {
@@ -59,6 +60,13 @@ REST_FRAMEWORK = {
 CRONJOBS = [
     ('*/15 * * * *', 'api.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
 ]
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,3 +151,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    # This lets Django's collectstatic store webpack bundles
+    os.path.join(BASE_DIR, 'assets'),
+)
