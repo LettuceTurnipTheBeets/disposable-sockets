@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 import random
-from .forms import RoomForm, CodeForm, NameForm
+from .forms import RoomForm, CodeForm, NameForm, ChatForm
 from api.models.rooms import Room
+from api.models.chat import Chat
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 
@@ -71,12 +72,10 @@ def join(request):
                 room = Room.objects.get(code=code_form.cleaned_data['code'])
             except:
                 raise Http404
-                # reload index
             
             if room.code in request.COOKIES:            
                 return redirect('/{}/'.format(room.code))
             else:
-                #return redirect('/registration/?room={}'.format(room.code))
                 return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
     else:
         code_form  = CodeForm()
@@ -117,9 +116,9 @@ def about(request):
 """
 Room Detail Page
 """
-def room(request, room_code):
+def room(request, code):
     try:
-        room = Room.objects.get(code=room_code)
+        room = Room.objects.get(code=code)
     except IndexError:
         raise Http404
 
@@ -128,5 +127,29 @@ def room(request, room_code):
     else:
         raise Http404
 
-    return render(request, 'room.html', {'room': room, 'name': name})    
+    return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})    
 
+"""
+Chat
+"""
+def chat(request, code):   
+    print(code)
+    if request.method == 'POST':
+        chat_form = ChatForm(request.POST)
+
+        if chat_form.is_valid():
+            room = Room.objects.get(code=code)
+
+            name = request.COOKIES.get(room.code)
+
+            Chat.objects.create(
+                room_id=room.id,
+                message=chat_form.cleaned_data['message'],
+                name=name,
+            )
+
+        return redirect('/{}/'.format(room.code))
+        #return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})
+    else:
+        raise Http404
+        

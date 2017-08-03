@@ -17,3 +17,6 @@ class CodeForm(forms.Form):
 
 class NameForm(forms.Form):
     name = forms.CharField(min_length=1, max_length=20, required=True, label='Name')
+
+class ChatForm(forms.Form):
+    message = forms.CharField(min_length=1, max_length=144, required=True, label='Chat')

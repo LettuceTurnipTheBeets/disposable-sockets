@@ -8,5 +8,11 @@ Room Name:&nbsp;&nbsp;<b>{{ room.name }}</b><br>
 Room Code:&nbsp;&nbsp;&nbsp;<b>{{ room.code }}</b><br>
 ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ room.id }}</b><br>
 User Name:&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ name }}</b><br>
+<br><br><br><br><br>
+    <form action="chat/" method="POST">
+        {% csrf_token %}
+        {{ chat_form }}
+        <input type="submit" value="Enter"/>
+    </form>
 
 {% endblock %}
