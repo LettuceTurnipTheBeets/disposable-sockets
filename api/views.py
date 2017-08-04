@@ -149,7 +149,6 @@ def chat(request, code):
             )
 
         return redirect('/{}/'.format(room.code))
-        #return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})
     else:
         raise Http404
         

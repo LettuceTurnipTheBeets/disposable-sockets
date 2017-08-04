@@ -11,7 +11,7 @@ class CodeForm(forms.Form):
     def clean(self):
         cd = self.cleaned_data
 
-        if len(Room.objects.all().filter(code=self.cleaned_data['code'])) == 0:
+        if len(Room.objects.all().filter(code=cd['code'])) == 0:
             self.add_error('code', 'No room exists with that code.')
         return cd
 
@@ -20,3 +20,7 @@ class NameForm(forms.Form):
 
 class ChatForm(forms.Form):
     message = forms.CharField(min_length=1, max_length=144, required=True, label='Chat')
+
+    def clean(self):
+        self.cleaned_data['message'] = self.cleaned_data['message'].strip()
+        return self.cleaned_data
