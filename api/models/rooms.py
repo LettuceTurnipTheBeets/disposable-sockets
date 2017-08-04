@@ -9,7 +9,7 @@ class Room(models.Model):
     code = models.CharField(max_length=4, blank=False, unique=True)
     description = models.TextField(blank=True)
     admin = models.CharField(max_length=20, blank=False)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(blank=False)
     #duration = models.IntegerField(default=3, choices=DURATION_CHOICES)
     name = models.CharField(max_length=40, blank=True)
 

@@ -8,6 +8,7 @@ from api.models.guests import Guest
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 from django.utils import timezone
+from api.helpers import now
 
 
 """
@@ -43,6 +44,7 @@ def index(request):
                         admin=room_form.cleaned_data['username'],
                         name=room_form.cleaned_data['room_name'],
                         code=room_code,
+                        created=now(),
                     )
                     room_condition = False
                 except IntegrityError:
@@ -157,6 +159,7 @@ def chat(request, code):
             room.chat.create(
                 message=chat_form.cleaned_data['message'],
                 name=name,
+                time=now(),
             )
 
         return redirect('/{}/'.format(room.code))
