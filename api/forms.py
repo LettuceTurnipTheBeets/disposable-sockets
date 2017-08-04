@@ -22,5 +22,8 @@ class ChatForm(forms.Form):
     message = forms.CharField(min_length=1, max_length=144, required=True, label='Chat')
 
     def clean(self):
-        self.cleaned_data['message'] = self.cleaned_data['message'].strip()
+        message = self.cleaned_data.get('message', None)
+        if message:
+            message = message.strip()
+
         return self.cleaned_data

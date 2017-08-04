@@ -127,7 +127,7 @@ def room(request, code):
     else:
         raise Http404
 
-    return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})    
+    return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})
 
 """
 Chat
@@ -136,10 +136,9 @@ def chat(request, code):
     print(code)
     if request.method == 'POST':
         chat_form = ChatForm(request.POST)
+        room = Room.objects.get(code=code)
 
         if chat_form.is_valid():
-            room = Room.objects.get(code=code)
-
             name = request.COOKIES.get(room.code)
 
             Chat.objects.create(
@@ -150,5 +149,4 @@ def chat(request, code):
 
         return redirect('/{}/'.format(room.code))
     else:
-        raise Http404
-        
+        raise Http404        
