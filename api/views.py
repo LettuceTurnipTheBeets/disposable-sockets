@@ -7,6 +7,8 @@ from api.models.chat import Chat
 from api.models.guests import Guest
 from datetime import datetime, timedelta
 from django.db import IntegrityError
+from django.utils import timezone
+
 
 """
 Index/Home/Landing Page
@@ -50,7 +52,8 @@ def index(request):
 
             response = redirect('/{}'.format(obj.code))
             response.set_cookie(obj.code, obj.admin, max_age=300)
-       
+            # max_age=86400 for a day 
+     
             return response
 
     # if a GET (or any other method) we'll create a blank form
@@ -100,7 +103,11 @@ def registration(request):
             )
             response = redirect('/{}/'.format(room.code))
             response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
-            
+            # max_age depends on when the room expires
+            # use the below code if/when a room lasts 1 day
+            # max_age =  (room.expires() - timezone.now()).seconds + 900
+            # the 900 is the script frequency 900 seconds = 15 minutes
+             
             return response
 
         else:
