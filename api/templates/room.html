@@ -8,8 +8,32 @@ Room Name:&nbsp;&nbsp;<b>{{ room.name }}</b><br>
 Room Code:&nbsp;&nbsp;&nbsp;<b>{{ room.code }}</b><br>
 ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ room.id }}</b><br>
 User Name:&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ name }}</b><br>
-<br><br><br><br><br>
-    <form action="chat/" method="POST">
+<br>
+<h2>Users:</h2>
+
+<ol>
+    <li><b>{{ room.admin }}</b></li>
+{% for user in room.guests.all %}
+    <li>{{ user.user }}</li>
+{% endfor %}
+</ol>
+
+<br><table>
+    <tr>
+        <th>Message</th>
+        <th>User</th>
+        <th>Date</th>
+    </tr>
+        {% for text in room.chat.all %}
+    <tr>
+        <td>{{ text.message }}</td>
+        <td>{{ text.name }}</td>
+        <td>{{ text.time|date:"j/m g:i A" }}</td>
+    </tr>
+        {% endfor %}
+</table>
+
+    <form action="chat/" method="POST" style="position:fixed;bottom:0">
         {% csrf_token %}
         {{ chat_form }}
         <input type="submit" value="Enter"/>

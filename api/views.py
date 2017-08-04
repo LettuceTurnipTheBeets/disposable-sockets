@@ -95,7 +95,9 @@ def registration(request):
         if form.is_valid():
             room = Room.objects.get(code=room_code)
 
-            Guest.objects.create(room_id=room.id, user=form.cleaned_data['name'])
+            room.guests.create(
+                user=form.cleaned_data['name'],
+            )
             response = redirect('/{}/'.format(room.code))
             response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
             
@@ -124,12 +126,14 @@ def room(request, code):
     except IndexError:
         raise Http404
 
+    guests = room.guests.all()
+    
     if room.code in request.COOKIES:
         name = request.COOKIES.get(room.code)
     else:
         raise Http404
 
-    return render(request, 'room.html', {'room': room, 'name': name, 'chat_form': ChatForm()})
+    return render(request, 'room.html', {'room': room, 'guests': guests, 'name': name, 'chat_form': ChatForm()})
 
 """
 Chat
@@ -143,8 +147,7 @@ def chat(request, code):
         if chat_form.is_valid():
             name = request.COOKIES.get(room.code)
 
-            Chat.objects.create(
-                room_id=room.id,
+            room.chat.create(
                 message=chat_form.cleaned_data['message'],
                 name=name,
             )
