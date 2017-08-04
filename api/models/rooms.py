@@ -27,5 +27,8 @@ class Room(models.Model):
     def expires(self):
         return self.created + timedelta(hours=24)
 
+    def __str__(self):
+        return self.code
+
     class Meta:
         ordering = ('-id',)

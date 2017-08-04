@@ -1,7 +1,7 @@
 from api.models.rooms import Room
 from api.viewsets.chat import ChatSerializer
+from api.viewsets.guests import GuestSerializer
 from rest_framework import serializers, viewsets
-from rest_framework.decorators import api_view
 import django_filters
 
 
@@ -20,6 +20,7 @@ class RoomFilter(django_filters.rest_framework.FilterSet):
 
 class RoomSerializer(serializers.ModelSerializer):
     chat = ChatSerializer(many=True, required=False, read_only=True)
+    guests = GuestSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Room
@@ -31,6 +32,7 @@ class RoomSerializer(serializers.ModelSerializer):
             'created',
             'description',
             'expires',
+            'guests',
             'name',
             'url',
         )

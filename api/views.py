@@ -4,6 +4,7 @@ import random
 from .forms import RoomForm, CodeForm, NameForm, ChatForm
 from api.models.rooms import Room
 from api.models.chat import Chat
+from api.models.guests import Guest
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 
@@ -94,6 +95,7 @@ def registration(request):
         if form.is_valid():
             room = Room.objects.get(code=room_code)
 
+            Guest.objects.create(room_id=room.id, user=form.cleaned_data['name'])
             response = redirect('/{}/'.format(room.code))
             response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
             

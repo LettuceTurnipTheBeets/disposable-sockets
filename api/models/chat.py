@@ -10,6 +10,9 @@ class Chat(models.Model):
     name = models.CharField(max_length=40)
     message = models.TextField(max_length=140)
     time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
     
     class Meta:
         ordering = ('-time',)
