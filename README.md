@@ -1,4 +1,4 @@
-# disposable
+# disposable-sockets
 
 This repository represents the full site content.
 
