@@ -3,6 +3,10 @@ from django.utils import timezone
 
 
 def delete_expired_rooms():
+    """
+    Check if a room has expired and if so delete it.
+    If this changes you need to do 'python manage.py crontab show/add/remove'
+    """
     rooms = Room.objects.all()
     now = timezone.now()
 

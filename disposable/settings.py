@@ -38,13 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'channels',
     'sockets',
     'django_crontab',
     'webpack_loader',
 ]
 
 CRONJOBS = [
-    ('*/15 * * * *', 'api.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
+    ('*/15 * * * *', 'sockets.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
 ]
 
 WEBPACK_LOADER = {
