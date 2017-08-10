@@ -39,22 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'sockets',
-    'rest_framework',
-    'django_filters',
     'django_crontab',
     'webpack_loader',
 ]
-
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
-    ],
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    'PAGE_SIZE': 10,
-}
 
 CRONJOBS = [
     ('*/15 * * * *', 'api.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
