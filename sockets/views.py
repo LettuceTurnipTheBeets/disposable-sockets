@@ -11,10 +11,10 @@ from django.utils import timezone
 from sockets.helpers import now
 
 
-"""
-Index/Home/Landing Page
-"""
 def index(request):
+    """
+    Index/Home/Landing Page
+    """
     code_form = CodeForm()
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -64,10 +64,10 @@ def index(request):
 
     return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form})
 
-"""
-Join Endpoint
-"""
 def join(request):
+    """
+    Join Endpoint
+    """
     room_form = RoomForm()
 
     if request.method == 'POST':
@@ -88,10 +88,10 @@ def join(request):
 
     return render(request, 'index.html', {'code_form': code_form, 'room_form': room_form})
 
-"""
-Registration Page
-"""
-def registration(request):  
+def registration(request):
+    """
+    Registration Page
+    """  
     if request.method == 'POST':
         form = NameForm(request.POST)
         room_code  = request.POST.get('room_code')
@@ -120,16 +120,16 @@ def registration(request):
   
     return render(request, 'registration.html', {'form': form})  
 
-"""
-About Page
-"""
 def about(request):
-     return render(request, 'about.html')
+    """
+    About Page
+    """
+    return render(request, 'about.html')
 
-"""
-Room Detail Page
-"""
 def room(request, code):
+    """
+    Room Detail Page
+    """
     try:
         room = Room.objects.get(code=code)
     except IndexError:
@@ -144,10 +144,10 @@ def room(request, code):
 
     return render(request, 'room.html', {'room': room, 'guests': guests, 'name': name, 'chat_form': ChatForm()})
 
-"""
-Chat
-"""
-def chat(request, code):   
+def chat(request, code):
+    """
+    Chat
+    """   
     print(code)
     if request.method == 'POST':
         chat_form = ChatForm(request.POST)
