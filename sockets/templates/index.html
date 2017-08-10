@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Index</h1>
+
+Have a room code?  Enter it here.
+
+    <form action="/join/" method="POST">
+        {% csrf_token %}
+        {{ code_form }}
+        <input type="submit" value="Join"/>
+    </form>
+
+Enter in your name and we'll create a room for you for 24 hours.<br>
+
+    <form action="/" method="POST">
+        {% csrf_token %}
+        {{ room_form }}
+        <input type="submit" value="Create"/>
+    </form>
+
+    <ul>
+        <li><a href="/about/">About</a></li>
+    </ul>
+
+{% endblock %}
