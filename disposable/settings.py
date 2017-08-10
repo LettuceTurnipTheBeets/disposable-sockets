@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'api',
+    'sockets',
     'rest_framework',
     'django_filters',
     'django_crontab',
