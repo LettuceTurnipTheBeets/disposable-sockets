@@ -39,4 +39,17 @@
         <input type="submit" value="Enter"/>
     </form>
 
+<script>
+    $(function () {
+        var ws_path =  window.location.pathname + "stream/";
+        console.log("Connecting to " + ws_path);
+        var webSocketBridge = new channels.WebSocketBridge();
+        webSocketBridge.connect(ws_path);
+
+        // Helpful debugging
+        webSocketBridge.socket.onopen = function() { console.log("Connected to notification socket"); }
+        webSocketBridge.socket.onclose = function() { console.log("Disconnected to notification socket"); }
+    });
+</script>
+
 {% endblock %}
