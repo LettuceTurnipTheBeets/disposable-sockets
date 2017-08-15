@@ -16,6 +16,8 @@ def index(request):
     Index/Home/Landing Page
     """
     code_form = CodeForm()
+    total = Room.objects.first().id
+    total_hours = total * 24 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -62,7 +64,7 @@ def index(request):
     else:
         room_form = RoomForm()
 
-    return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form})
+    return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form, 'total': total, 'total_hours': total_hours})
 
 def join(request):
     """

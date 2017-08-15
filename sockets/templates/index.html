@@ -4,7 +4,9 @@
 
 <h1>Index</h1>
 
-Have a room code?  Enter it here.
+So far, {{ total }} rooms have been created.  They've been up for {{ total_hours }} hours.<br>
+
+<br>Have a room code?  Enter it here.
 
     <form action="/join/" method="POST">
         {% csrf_token %}
@@ -12,7 +14,7 @@ Have a room code?  Enter it here.
         <input type="submit" value="Join"/>
     </form>
 
-Enter in your name and we'll create a room for you for 24 hours.<br>
+<br>Enter in your name and we'll create a room for you for 24 hours.<br>
 
     <form action="/" method="POST">
         {% csrf_token %}

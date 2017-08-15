@@ -4,7 +4,7 @@ from sockets.choices import DURATION_CHOICES
 
 class Room(models.Model):
     """
-    Announcement model
+    Room model
     """
     code = models.CharField(max_length=4, blank=False, unique=True)
     description = models.TextField(blank=True)
