@@ -5,6 +5,7 @@ from .forms import RoomForm, CodeForm, NameForm, ChatForm
 from sockets.models.rooms import Room
 from sockets.models.chat import Chat
 from sockets.models.guests import Guest
+from sockets.models.integervalues import IntegerValue
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 from django.utils import timezone
@@ -148,7 +149,13 @@ def room(request, code):
     else:
         raise Http404
 
-    return render(request, 'room.html', {'room': room, 'guests': guests, 'name': name, 'chat_form': ChatForm()})
+    return render(request, 'room.html', {
+        'room': room, 
+        'guests': guests,
+        'name': name,
+        'chat_form': ChatForm(),
+        "integer_values": IntegerValue.objects.order_by("id")
+    })
 
 def chat(request, code):
     """
