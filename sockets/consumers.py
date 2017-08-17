@@ -1,9 +1,11 @@
-import json
-from channels import Channel
+from channels.generic.websockets import WebsocketDemultiplexer
+
+from sockets.models.integervalues import IntegerValueBinding
 
 
-def ws_connect(message):
-    pass
+class Demultiplexer(WebsocketDemultiplexer):
+    consumers = {
+        "intval": IntegerValueBinding.consumer,
+    }
 
-def ws_disconnect(message):
-    pass
+    groups = ["binding.values"]

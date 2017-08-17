@@ -16,7 +16,11 @@ def index(request):
     Index/Home/Landing Page
     """
     code_form = CodeForm()
-    total = Room.objects.first().id
+    try:
+        total = Room.objects.first().id
+    except AttributeError:
+        total = 0
+
     total_hours = total * 24 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':

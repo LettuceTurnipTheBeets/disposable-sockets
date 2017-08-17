@@ -1,6 +1,11 @@
-from channels import include
+from channels import route_class
+from sockets.consumers import Demultiplexer
 
 
+# The channel routing defines what channels get handled by what consumers,
+# including optional matching on message attributes. In this example, we route
+# all WebSocket connections to the class-based BindingConsumer (the consumer
+# class itself specifies what channels it wants to consume)
 channel_routing = [
-    include("sockets.routing.websocket_routing", path=r"^/sockets"),
+    route_class(Demultiplexer, path='^/stream/?$'),
 ]
