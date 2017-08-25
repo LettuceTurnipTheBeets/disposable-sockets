@@ -155,7 +155,7 @@ def room(request, code):
         'chat_form': ChatForm(),
     })
 
-def chat(request, code):
+'''def chat(request, code):
     """
     Chat
     """   
@@ -175,4 +175,4 @@ def chat(request, code):
 
         return redirect('/{}/'.format(room.code))
     else:
-        raise Http404        
+        raise Http404'''        

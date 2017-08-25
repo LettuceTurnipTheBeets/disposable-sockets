@@ -17,16 +17,16 @@
     <li>{{ user.user }}</li>
 {% endfor %}
 </ol>
-
-<button class="post-button">POST</button>
-<textarea class="content-post"></textarea>
-<hr>
+<div style="position:fixed;bottom:0">
+    <input id="chat_input" type="text" class="content-post">
+    <button id="chat_button" class="post-button">Enter</button>
+</div>
 
     <div id="posts">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
                 <h3>{{ text.name}} - {{ text.time|date:"D d M g:i A" }}</h2>
-                {{ text.message }}i
+                {{ text.message }}
             </div>
         {% endfor %}
     </div>
@@ -45,12 +45,6 @@
     </tr>
         {% endfor %}
 </table>
-
-    <form action="chat/" method="POST" style="position:fixed;bottom:0">
-        {% csrf_token %}
-        {{ chat_form }}
-        <input type="submit" value="Enter"/>
-    </form>
 
     <script>
         $(function () {
@@ -90,6 +84,11 @@
                 }
             });
 
+            $("#chat_input").keyup(function(event){
+                if(event.keyCode == 13){
+                    $("#chat_button").click();
+                }
+            });
 
             // Helpful debugging
             webSocketBridge.socket.addEventListener('open', function() { console.log("Connected to notification socket"); });
