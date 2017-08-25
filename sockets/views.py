@@ -5,7 +5,6 @@ from .forms import RoomForm, CodeForm, NameForm, ChatForm
 from sockets.models.rooms import Room
 from sockets.models.chat import Chat
 from sockets.models.guests import Guest
-from sockets.models.integervalues import IntegerValue
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 from django.utils import timezone
@@ -60,7 +59,7 @@ def index(request):
             print (room_code)
 
             response = redirect('/{}'.format(obj.code))
-            response.set_cookie(obj.code, obj.admin, max_age=300)
+            response.set_cookie(obj.code, obj.admin, max_age=3600)
             # max_age=86400 for a day 
      
             return response
@@ -111,7 +110,7 @@ def registration(request):
                 user=form.cleaned_data['name'],
             )
             response = redirect('/{}/'.format(room.code))
-            response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
+            response.set_cookie(room.code, form.cleaned_data['name'], max_age=3600)
             # max_age depends on when the room expires
             # use the below code if/when a room lasts 1 day
             # max_age =  (room.expires() - timezone.now()).seconds + 900
@@ -154,7 +153,6 @@ def room(request, code):
         'guests': guests,
         'name': name,
         'chat_form': ChatForm(),
-        "integer_values": IntegerValue.objects.order_by("id")
     })
 
 def chat(request, code):
