@@ -56,13 +56,12 @@ def index(request):
                 except IntegrityError:
                     pass
 
-            print (room_code)
-
-            response = redirect('/{}'.format(obj.code))
-            response.set_cookie(obj.code, obj.admin, max_age=3600)
+            print ('Create room '.format(room_code))
+            request.session[obj.code] = obj.admin
+            request.session.set_expiry(3600)
             # max_age=86400 for a day 
      
-            return response
+            return redirect('/{}'.format(obj.code))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -85,7 +84,7 @@ def join(request):
             except:
                 raise Http404
             
-            if room.code in request.COOKIES:            
+            if room.code in request.session:          
                 return redirect('/{}/'.format(room.code))
             else:
                 return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
@@ -109,14 +108,14 @@ def registration(request):
             room.guests.create(
                 user=form.cleaned_data['name'],
             )
-            response = redirect('/{}/'.format(room.code))
-            response.set_cookie(room.code, form.cleaned_data['name'], max_age=3600)
+            request.session[room.code] = form.cleaned_data['name']
+            request.session.set_expiry(3600)
             # max_age depends on when the room expires
             # use the below code if/when a room lasts 1 day
             # max_age =  (room.expires() - timezone.now()).seconds + 900
             # the 900 is the script frequency 900 seconds = 15 minutes
              
-            return response
+            return redirect('/{}/'.format(room.code))
 
         else:
             return redirect('/registration/')
@@ -143,8 +142,8 @@ def room(request, code):
 
     guests = room.guests.all()
     
-    if room.code in request.COOKIES:
-        name = request.COOKIES.get(room.code)
+    if room.code in request.session:
+        name = request.session[room.code]
     else:
         raise Http404
 
