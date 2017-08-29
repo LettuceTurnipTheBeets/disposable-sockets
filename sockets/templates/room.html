@@ -2,49 +2,36 @@
 
 {% block content %}
 
-<div style="position:fixed;top:0">
+<div>
     Room Name:&nbsp;&nbsp;<b>{{ room.name }}</b><br>
     Room Code:&nbsp;&nbsp;&nbsp;<b>{{ room.code }}</b><br>
     ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ room.id }}</b><br>
     User Name:&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ name }}</b><br>
-</div>
-<br><br><br><br>
-<h2>Users:</h2>
 
-<ol>
-    <li><b>{{ room.admin }}</b></li>
-{% for user in room.guests.all %}
-    <li>{{ user.user }}</li>
-{% endfor %}
-</ol>
+    <br>
+    <h2>Users:</h2>
+
+    <ol>
+        <li><b>{{ room.admin }}</b></li>
+    {% for user in room.guests.all %}
+        <li>{{ user.user }}</li>
+    {% endfor %}
+    </ol>
+</div>
+
 <div style="position:fixed;bottom:0">
     <input id="chat_input" type="text" class="content-post">
     <button id="chat_button" class="post-button">Enter</button>
 </div>
 
-    <div id="posts">
+    <div id="posts" style="overflow-y:scroll;height:500px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
-                <h3>{{ text.name}} - {{ text.time|date:"D d M g:i A" }}</h2>
-                {{ text.message }}
+                <h3>{{ text.message }}</h3>
+                {{ text.name}} - {{ text.time|date:"D d M g:i A" }}
             </div>
         {% endfor %}
     </div>
-
-<br><table>
-    <tr>
-        <th>Message</th>
-        <th>User</th>
-        <th>Date</th>
-    </tr>
-        {% for text in room.chat.all %}
-    <tr>
-        <td>{{ text.message }}</td>
-        <td>{{ text.name }}</td>
-        <td>{{ text.time|date:"j/m g:i A" }}</td>
-    </tr>
-        {% endfor %}
-</table>
 
     <script>
         $(function () {
@@ -55,7 +42,7 @@
             webSocketBridge.listen(function(data) {
                 console.log("Got message " + data);
                 // Create the inner content of the post div
-                var content = "<h3>" + data.name + " - " + data.time + "</h3>" + data.message;
+                var content = "<h3>" + data.message + "</h3>" + data.name + " - " + data.time;
                 console.log("content is created" + data.id + "\n" + data.message);
                 // See if there's a div to replace it in, or if we should add a new one
                 var existing = $("div[data-post-id=" + data.id + "]");
