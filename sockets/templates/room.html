@@ -51,11 +51,12 @@
                     console.log("if");
                 } else {
                     var newdiv = $("<div class='post' data-post-id='" + data.id + "'>" + content + "</div>");
-                    $("#posts").prepend(newdiv);
+                    $("#posts").append(newdiv);
+                    updateScroll();
                     console.log("else");
                 }
             });
-            console.log("Prepended");
+            console.log("Appended");
 
             // save blog post
             $(".post-button").click(function(){
@@ -77,6 +78,10 @@
                 }
             });
 
+            function updateScroll() {
+               var element = document.getElementById("posts");
+               element.scrollTop = element.scrollHeight;
+            }
             // Helpful debugging
             webSocketBridge.socket.addEventListener('open', function() { console.log("Connected to notification socket"); });
             webSocketBridge.socket.addEventListener('close', function() { console.log("Disconnected to notification socket"); });

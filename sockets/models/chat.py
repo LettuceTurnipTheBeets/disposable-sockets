@@ -48,4 +48,4 @@ class Chat(models.Model):
         return result
 
     class Meta:
-        ordering = ('-time',)
+        ordering = ('time',)
