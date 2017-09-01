@@ -4,7 +4,6 @@ from sockets.models.rooms import Room
 from sockets.models.chat import Chat
 from sockets.helpers import now
 
-
 def connect_blog(message, code):
     """
     When the user opens a WebSocket to a liveblog stream, adds them to the
@@ -39,10 +38,10 @@ def save_post(message, code):
     """
     post = json.loads(message['text'])['post']
     room = Room.objects.get(code=code)
-    #Chat.objects.create(room_id=room.id, body=post)
+    name = json.loads(message['text'])['name']
 
     room.chat.create(
         message=post,
-        name='test name',
+        name=name,
         time=now(),
     )
