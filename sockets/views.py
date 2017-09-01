@@ -17,7 +17,7 @@ def index(request):
     """
     code_form = CodeForm()
     try:
-        total = Room.objects.first().id
+        total = Room.objects.count()
     except AttributeError:
         total = 0
 
@@ -57,7 +57,11 @@ def index(request):
                     pass
 
             print ('Create room '.format(room_code))
+            obj.guests.create(
+                user=obj.admin,
+            )            
             request.session[obj.code] = obj.admin
+            request.session['guest_id'] = Guest.objects.first().id
             request.session.set_expiry(3600)
             # max_age=86400 for a day 
      
@@ -109,6 +113,7 @@ def registration(request):
                 user=form.cleaned_data['name'],
             )
             request.session[room.code] = form.cleaned_data['name']
+            request.session['guest_id'] = Guest.objects.first().id
             request.session.set_expiry(3600)
             # max_age depends on when the room expires
             # use the below code if/when a room lasts 1 day
@@ -152,26 +157,4 @@ def room(request, code):
         'guests': guests,
         'name': name,
         'chat_form': ChatForm(),
-    })
-
-'''def chat(request, code):
-    """
-    Chat
-    """   
-    print(code)
-    if request.method == 'POST':
-        chat_form = ChatForm(request.POST)
-        room = Room.objects.get(code=code)
-
-        if chat_form.is_valid():
-            name = request.COOKIES.get(room.code)
-
-            room.chat.create(
-                message=chat_form.cleaned_data['message'],
-                name=name,
-                time=now(),
-            )
-
-        return redirect('/{}/'.format(room.code))
-    else:
-        raise Http404'''        
+    })    
