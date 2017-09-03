@@ -61,7 +61,6 @@ def index(request):
                 user=obj.admin,
             )            
             request.session[obj.code] = obj.admin
-            request.session['guest_id'] = Guest.objects.first().id
             request.session.set_expiry(3600)
             # max_age=86400 for a day 
      
@@ -103,17 +102,20 @@ def registration(request):
     """  
     if request.method == 'POST':
         form = NameForm(request.POST)
-        room_code  = request.POST.get('room_code')
+        room_code = request.POST.get('room_code')
         print(room_code)
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
-
-            room.guests.create(
-                user=form.cleaned_data['name'],
-            )
+            
+            try:
+                room.guests.create(
+                    user=form.cleaned_data['name'],
+                )
+            except IntegrityError:
+               return render(request, 'registration.html', {'form': form, 'error_message': '{} is already in use.'.format(form.cleaned_data['name']), 'room_code': room_code})
+ 
             request.session[room.code] = form.cleaned_data['name']
-            request.session['guest_id'] = Guest.objects.first().id
             request.session.set_expiry(3600)
             # max_age depends on when the room expires
             # use the below code if/when a room lasts 1 day
@@ -128,7 +130,7 @@ def registration(request):
     else:
         form = NameForm() 
   
-    return render(request, 'registration.html', {'form': form})  
+    return render(request, 'registration.html', {'form': form, 'error_message': ''})  
 
 def about(request):
     """
