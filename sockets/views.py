@@ -113,7 +113,7 @@ def registration(request):
                     user=form.cleaned_data['name'],
                 )
             except IntegrityError:
-               return render(request, 'registration.html', {'form': form, 'error_message': '{} is already in use.'.format(form.cleaned_data['name']), 'room_code': room_code})
+               return render(request, 'registration.html', {'form': form, 'error_message': '{} is already in use.  Please enter a new name.'.format(form.cleaned_data['name']), 'room_code': room_code})
  
             request.session[room.code] = form.cleaned_data['name']
             request.session.set_expiry(3600)

@@ -1,3 +1,6 @@
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static "css/signature-pad.css" %}" />
+
   <div id="signature-pad" class="m-signature-pad">
     <div class="m-signature-pad--body">
       <canvas></canvas>
@@ -8,13 +11,12 @@
         <button type="button" class="button clear" data-action="clear">Clear</button>
       </div>
       <div class="right">
-        <button type="button" class="button save" data-action="save-png">Save as PNG</button>
-        <button type="button" class="button save" data-action="save-svg">Save as SVG</button>
+        <input type="submit" class="button save" data-action="save-png">
       </div>
     </div>
   </div>
 
   {% load staticfiles %}
 
-  <script src="{% static "js/signature_pad.js" %}" type="text/javascript"></script>
-  <script src="{% static "js/signature_app.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/signature-pad.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/signature-app.js" %}" type="text/javascript"></script>

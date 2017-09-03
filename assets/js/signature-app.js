@@ -1,7 +1,5 @@
 var wrapper = document.getElementById("signature-pad");
 var clearButton = wrapper.querySelector("[data-action=clear]");
-var savePNGButton = wrapper.querySelector("[data-action=save-png]");
-var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
 var canvas = wrapper.querySelector("canvas");
 var signaturePad = new SignaturePad(canvas);
 
@@ -32,20 +30,4 @@ resizeCanvas();
 
 clearButton.addEventListener("click", function (event) {
     signaturePad.clear();
-});
-
-savePNGButton.addEventListener("click", function (event) {
-    if (signaturePad.isEmpty()) {
-        alert("Please provide signature first.");
-    } else {
-        window.open(signaturePad.toDataURL());
-    }
-});
-
-saveSVGButton.addEventListener("click", function (event) {
-    if (signaturePad.isEmpty()) {
-        alert("Please provide signature first.");
-    } else {
-        window.open(signaturePad.toDataURL('image/svg+xml'));
-    }
 });
