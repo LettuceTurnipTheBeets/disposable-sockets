@@ -1,7 +1,16 @@
 var wrapper = document.getElementById("signature-pad");
 var clearButton = wrapper.querySelector("[data-action=clear]");
 var canvas = wrapper.querySelector("canvas");
-var signaturePad = new SignaturePad(canvas);
+var signaturePad = new SignaturePad(canvas, {
+    backgroundColor: "rgb(255,255,255)",
+    minWidth: 0.4,
+    maxWidth: 2,
+    dotSize: 1.2,
+    onEnd: function () {
+        signature = signaturePad.toDataURL("image/jpeg");
+        document.getElementById('id_hidden_image').value = signature;
+    }
+  });
 
 // Adjust canvas coordinate space taking into account pixel ratio,
 // to make it look crisp on mobile devices.

@@ -7,8 +7,12 @@ from sockets.models.chat import Chat
 from sockets.models.guests import Guest
 from datetime import datetime, timedelta
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from sockets.helpers import now
+import re, io
+from base64 import decodestring
+from django.core.files import File
 
 
 def index(request):
@@ -70,7 +74,15 @@ def index(request):
     else:
         room_form = RoomForm()
 
-    return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form, 'total': total, 'total_hours': total_hours})
+    return render(
+        request,
+        'index.html', {
+            'room_form': room_form,
+            'code_form': code_form,
+            'total': total,
+            'total_hours': total_hours,
+        }
+    )
 
 def join(request):
     """
@@ -90,11 +102,21 @@ def join(request):
             if room.code in request.session:          
                 return redirect('/{}/'.format(room.code))
             else:
-                return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
+                return render(
+                    request,
+                    'registration.html',
+                    {'form': NameForm(), 'room_code': room.code}
+                )
     else:
         code_form  = CodeForm()
 
-    return render(request, 'index.html', {'code_form': code_form, 'room_form': room_form})
+    return render(
+        request,
+        'index.html', {
+            'code_form': code_form,
+            'room_form': room_form,
+        },
+    )
 
 def registration(request):
     """
@@ -107,13 +129,31 @@ def registration(request):
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
+            name = form.cleaned_data['name']
+            data_url_pattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
+            signature_url = request.POST.get("signatureHolder")
+            if(signature_url != '0'):
+                print('signature_url exists')
+            signature_data = data_url_pattern.match(signature_url).group(2)
+            signature_data = bytes(signature_data, 'UTF-8')
+            signature_data = decodestring(signature_data)
+            img_io = io.BytesIO(signature_data)
             
             try:
-                room.guests.create(
-                    user=form.cleaned_data['name'],
+                room.guests.get(user=name)
+
+                return render(
+                    request,
+                    'registration.html',
+                    {'form': form, 'error_message': '{} is already in use.  Please enter a new name.'.format(form.cleaned_data['name']), 'room_code': room_code}
                 )
-            except IntegrityError:
-               return render(request, 'registration.html', {'form': form, 'error_message': '{} is already in use.  Please enter a new name.'.format(form.cleaned_data['name']), 'room_code': room_code})
+            except ObjectDoesNotExist:
+                obj = room.guests.create(
+                    user=name,
+                )
+
+            obj.drawing.save('{}-{}'.format(room_code, obj.user), File(img_io))
+            print('file saved')
  
             request.session[room.code] = form.cleaned_data['name']
             request.session.set_expiry(3600)
@@ -130,13 +170,22 @@ def registration(request):
     else:
         form = NameForm() 
   
-    return render(request, 'registration.html', {'form': form, 'error_message': ''})  
+    return render(
+        request,
+        'registration.html', {
+            'form': form,
+            'error_message': '',
+        }
+    )  
 
 def about(request):
     """
     About Page
     """
-    return render(request, 'about.html')
+    return render(
+        request,
+        'about.html'
+    )
 
 def room(request, code):
     """
@@ -154,9 +203,12 @@ def room(request, code):
     else:
         raise Http404
 
-    return render(request, 'room.html', {
-        'room': room, 
-        'guests': guests,
-        'name': name,
-        'chat_form': ChatForm(),
-    })    
+    return render(
+        request,
+        'room.html', {
+            'room': room, 
+            'guests': guests,
+            'name': name,
+            'chat_form': ChatForm(),
+        }
+    )    

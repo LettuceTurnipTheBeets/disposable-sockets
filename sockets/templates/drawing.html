@@ -1,6 +1,16 @@
+<head>
+  <meta charset="utf-8">
+  <title>Signature Pad demo</title>
+  <meta name="description" content="Signature Pad - HTML5 canvas based smooth signature drawing using variable width spline interpolation.">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static "css/signature-pad.css" %}" />
-
+</head>
+  <input id="id_hidden_image" type="hidden" name="signatureHolder" value="0">
   <div id="signature-pad" class="m-signature-pad">
     <div class="m-signature-pad--body">
       <canvas></canvas>
