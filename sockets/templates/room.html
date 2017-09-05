@@ -28,7 +28,6 @@
     <div id="posts" style="overflow-y:scroll;height:500px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
-                <img src="{% get_profile_picture room.code text.name %}" width="120" height="210">
                 <h3>{{ text.message }}</h3>
                 {{ text.name}} - {{ text.time|date:"D d M g:i A" }}
             </div>
@@ -44,7 +43,7 @@
             webSocketBridge.listen(function(data) {
                 console.log("Got message " + data);
                 // Create the inner content of the post div
-                var content = "<img src=" + data.url + " width='120' height='210'><h3>" + data.message + "</h3>" + data.name + " - " + data.time;
+                var content = "<h3>" + data.message + "</h3>" + data.name + " - " + data.time;
                 console.log("content is created" + data.id + "\n" + data.message);
                 // See if there's a div to replace it in, or if we should add a new one
                 var existing = $("div[data-post-id=" + data.id + "]");
