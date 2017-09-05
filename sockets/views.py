@@ -5,11 +5,14 @@ from .forms import RoomForm, CodeForm, NameForm, ChatForm
 from sockets.models.rooms import Room
 from sockets.models.chat import Chat
 from sockets.models.guests import Guest
-from sockets.models.integervalues import IntegerValue
 from datetime import datetime, timedelta
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from sockets.helpers import now
+import re, io
+from base64 import decodestring
+from django.core.files import File
 
 
 def index(request):
@@ -18,7 +21,7 @@ def index(request):
     """
     code_form = CodeForm()
     try:
-        total = Room.objects.first().id
+        total = Room.objects.count()
     except AttributeError:
         total = 0
 
@@ -57,19 +60,29 @@ def index(request):
                 except IntegrityError:
                     pass
 
-            print (room_code)
-
-            response = redirect('/{}'.format(obj.code))
-            response.set_cookie(obj.code, obj.admin, max_age=300)
+            print ('Create room '.format(room_code))
+            obj.guests.create(
+                user=obj.admin,
+            )            
+            request.session[obj.code] = obj.admin
+            request.session.set_expiry(3600)
             # max_age=86400 for a day 
      
-            return response
+            return redirect('/{}'.format(obj.code))
 
     # if a GET (or any other method) we'll create a blank form
     else:
         room_form = RoomForm()
 
-    return render(request, 'index.html', {'room_form': room_form, 'code_form': code_form, 'total': total, 'total_hours': total_hours})
+    return render(
+        request,
+        'index.html', {
+            'room_form': room_form,
+            'code_form': code_form,
+            'total': total,
+            'total_hours': total_hours,
+        }
+    )
 
 def join(request):
     """
@@ -86,14 +99,24 @@ def join(request):
             except:
                 raise Http404
             
-            if room.code in request.COOKIES:            
+            if room.code in request.session:          
                 return redirect('/{}/'.format(room.code))
             else:
-                return render(request, 'registration.html', {'form': NameForm(), 'room_code': room.code})
+                return render(
+                    request,
+                    'registration.html',
+                    {'form': NameForm(), 'room_code': room.code}
+                )
     else:
         code_form  = CodeForm()
 
-    return render(request, 'index.html', {'code_form': code_form, 'room_form': room_form})
+    return render(
+        request,
+        'index.html', {
+            'code_form': code_form,
+            'room_form': room_form,
+        },
+    )
 
 def registration(request):
     """
@@ -101,23 +124,47 @@ def registration(request):
     """  
     if request.method == 'POST':
         form = NameForm(request.POST)
-        room_code  = request.POST.get('room_code')
+        room_code = request.POST.get('room_code')
         print(room_code)
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
+            name = form.cleaned_data['name']
+            data_url_pattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
+            signature_url = request.POST.get("signatureHolder")
+            if(signature_url != '0'):
+                print('signature_url exists')
+            signature_data = data_url_pattern.match(signature_url).group(2)
+            signature_data = bytes(signature_data, 'UTF-8')
+            signature_data = decodestring(signature_data)
+            img_io = io.BytesIO(signature_data)
+            
+            try:
+                room.guests.get(user=name)
 
-            room.guests.create(
-                user=form.cleaned_data['name'],
-            )
-            response = redirect('/{}/'.format(room.code))
-            response.set_cookie(room.code, form.cleaned_data['name'], max_age=300)
+                return render(
+                    request,
+                    'registration.html',
+                    {'form': form, 'error_message': '{} is already in use.  Please enter a new name.'.format(form.cleaned_data['name']), 'room_code': room_code}
+                )
+            except ObjectDoesNotExist:
+                obj = room.guests.create(
+                    user=name,
+                )
+            #obj.drawing.height = 140
+            #obj.drawing.width = 80
+
+            obj.drawing.save('{}-{}'.format(room_code, obj.user), File(img_io))
+            print('file saved')
+ 
+            request.session[room.code] = form.cleaned_data['name']
+            request.session.set_expiry(3600)
             # max_age depends on when the room expires
             # use the below code if/when a room lasts 1 day
             # max_age =  (room.expires() - timezone.now()).seconds + 900
             # the 900 is the script frequency 900 seconds = 15 minutes
              
-            return response
+            return redirect('/{}/'.format(room.code))
 
         else:
             return redirect('/registration/')
@@ -125,13 +172,22 @@ def registration(request):
     else:
         form = NameForm() 
   
-    return render(request, 'registration.html', {'form': form})  
+    return render(
+        request,
+        'registration.html', {
+            'form': form,
+            'error_message': '',
+        }
+    )  
 
 def about(request):
     """
     About Page
     """
-    return render(request, 'about.html')
+    return render(
+        request,
+        'about.html'
+    )
 
 def room(request, code):
     """
@@ -144,37 +200,17 @@ def room(request, code):
 
     guests = room.guests.all()
     
-    if room.code in request.COOKIES:
-        name = request.COOKIES.get(room.code)
+    if room.code in request.session:
+        name = request.session[room.code]
     else:
         raise Http404
 
-    return render(request, 'room.html', {
-        'room': room, 
-        'guests': guests,
-        'name': name,
-        'chat_form': ChatForm(),
-        "integer_values": IntegerValue.objects.order_by("id")
-    })
-
-def chat(request, code):
-    """
-    Chat
-    """   
-    print(code)
-    if request.method == 'POST':
-        chat_form = ChatForm(request.POST)
-        room = Room.objects.get(code=code)
-
-        if chat_form.is_valid():
-            name = request.COOKIES.get(room.code)
-
-            room.chat.create(
-                message=chat_form.cleaned_data['message'],
-                name=name,
-                time=now(),
-            )
-
-        return redirect('/{}/'.format(room.code))
-    else:
-        raise Http404        
+    return render(
+        request,
+        'room.html', {
+            'room': room, 
+            'guests': guests,
+            'name': name,
+            'chat_form': ChatForm(),
+        }
+    )    

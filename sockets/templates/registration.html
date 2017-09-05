@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <h1>Registration</h1>
 
 This appears to be your first time entering this room.  What is your name?
-
+{% if error_message %}
+<h3>{{ error_message }}</h3>
+{% endif %}
     <form action="/registration/" method="POST">
         {% csrf_token %}
         {{ form }}
         <input type="hidden" name="room_code" value="{{ room_code }}">
-        <input type="submit" value="Join"/>
+{% include 'drawing.html' %}
     </form>
-
 {% endblock %}

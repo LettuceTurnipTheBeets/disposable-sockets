@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime, timedelta
 from sockets.choices import DURATION_CHOICES
+from channels import Group
 
 class Room(models.Model):
     """
@@ -23,6 +24,13 @@ class Room(models.Model):
         elif temp == 3:
             return self.created + timedelta(hours=24)
         return self.created + duration"""
+
+    @property
+    def group_name(self):
+        """
+        Returns the Channels Group name to use for sending notifications.
+        """
+        return "room-%s" % self.id
 
     def expires(self):
         return self.created + timedelta(hours=24)

@@ -2,91 +2,88 @@
 
 {% block content %}
 
-<div style="position:fixed;top:0">
+<div>
     Room Name:&nbsp;&nbsp;<b>{{ room.name }}</b><br>
     Room Code:&nbsp;&nbsp;&nbsp;<b>{{ room.code }}</b><br>
     ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ room.id }}</b><br>
     User Name:&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ name }}</b><br>
+
+    <br>
+    <h2>Users:</h2>
+
+    <ol>
+    {% for user in room.guests.all %}
+        <li>{{ user.user }}</li>
+    {% endfor %}
+    </ol>
 </div>
-<br><br><br><br>
-<h2>Users:</h2>
 
-<ol>
-    <li><b>{{ room.admin }}</b></li>
-{% for user in room.guests.all %}
-    <li>{{ user.user }}</li>
-{% endfor %}
-</ol>
+<div style="position:fixed;bottom:0">
+    <input id="chat_input" type="text" class="content-post">
+    <button id="chat_button" class="post-button">Enter</button>
+</div>
 
-<br><table>
-    <tr>
-        <th>Message</th>
-        <th>User</th>
-        <th>Date</th>
-    </tr>
+{% load extras %}
+{% load staticfiles %}
+    <div id="posts" style="overflow-y:scroll;height:500px">
         {% for text in room.chat.all %}
-    <tr>
-        <td>{{ text.message }}</td>
-        <td>{{ text.name }}</td>
-        <td>{{ text.time|date:"j/m g:i A" }}</td>
-    </tr>
-        {% endfor %}
-</table>
-
-    <form action="chat/" method="POST" style="position:fixed;bottom:0">
-        {% csrf_token %}
-        {{ chat_form }}
-        <input type="submit" value="Enter"/>
-    </form>
-
-    <div id="values">
-        {% for integer_value in integer_values %}
-            <p data-value-id='{{ integer_value.pk }}'>
-                <label>{{ integer_value.name }}</label>
-                <input type='range' value='{{ integer_value.value }}' min='0' max='100'>
-                <output>{{ integer_value.value }}</output>
-            </p>
-        {% empty %}
-            <p class="empty">No values yet.</p>
+            <div class="post" data-post-id="{{ text.id }}">
+                <img src="{% get_profile_picture room.code text.name %}" width="80" height="140">
+                <h3>{{ text.message }}</h3>
+                {{ text.name}} - {{ text.time|date:"D d M g:i A" }}
+            </div>
         {% endfor %}
     </div>
 
     <script>
         $(function () {
-            var ws_path =  "/stream/";
+            var ws_path =  window.location.pathname + "stream/";
             console.log("Connecting to " + ws_path);
             var webSocketBridge = new channels.WebSocketBridge();
             webSocketBridge.connect(ws_path);
-            webSocketBridge.listen();
-            webSocketBridge.demultiplex('intval', function(payload, streamName) {
-                // Handle different actions
-                if (payload.action == "create") {
-                    // Create the new integer value
-                    var content = "<p data-value-id='" + payload.pk + "'><label>" + payload.data.name + "</label> <input type='range' value='" + payload.data.value + "' min='0' max='100'><output>" + payload.data.value + "</output>";
-                    $("#values").append(content);
-                    // Remove empty message
-                    $("#values .empty").remove();
-                } else if (payload.action == "update") {
-                    $("p[data-value-id=" + payload.pk + "] label").text(payload.data.name);
-                    $("p[data-value-id=" + payload.pk + "] input").val(payload.data.value);
-                    $("p[data-value-id=" + payload.pk + "] output").val(payload.data.value);
-                } else if (payload.action == "delete") {
-                    $("p[data-value-id=" + payload.pk + "]").remove();
+            webSocketBridge.listen(function(data) {
+                console.log("Got message " + data);
+                // Create the inner content of the post div
+                var content = "<h3>" + data.message + "</h3>" + data.name + " - " + data.time;
+                console.log("content is created" + data.id + "\n" + data.message);
+                // See if there's a div to replace it in, or if we should add a new one
+                var existing = $("div[data-post-id=" + data.id + "]");
+                if (existing.length) {
+                    existing.html(content);
+                    console.log("if");
                 } else {
-                    console.log("Unknown action " + payload.action);
+                    var newdiv = $("<div class='post' data-post-id='" + data.id + "'>" + content + "</div>");
+                    $("#posts").append(newdiv);
+                    updateScroll();
+                    console.log("else");
                 }
             });
-            // Bind changing the slider value
-            $("#values").on("change", "input", function () {
-                $(this).parent().find("output").val($(this).val());
-                webSocketBridge.stream('intval').send({
-                    "pk": $(this).parent().attr("data-value-id"),
-                    "action": "update",
-                    "data": {
-                        "value": $(this).val(),
-                    }
-                });
+            console.log("Appended");
+
+            // save blog post
+            $(".post-button").click(function(){
+                if($(".content-post").val() == "")
+                {
+                    alert("Empty text");
+                }
+                else
+                {
+                    var content = $(".content-post").val()
+                    webSocketBridge.send({"post":content, "name":"{{ name }}"});
+                    $(".content-post").val('');
+                }
             });
+
+            $("#chat_input").keyup(function(event){
+                if(event.keyCode == 13){
+                    $("#chat_button").click();
+                }
+            });
+
+            function updateScroll() {
+               var element = document.getElementById("posts");
+               element.scrollTop = element.scrollHeight;
+            }
             // Helpful debugging
             webSocketBridge.socket.addEventListener('open', function() { console.log("Connected to notification socket"); });
             webSocketBridge.socket.addEventListener('close', function() { console.log("Disconnected to notification socket"); });
