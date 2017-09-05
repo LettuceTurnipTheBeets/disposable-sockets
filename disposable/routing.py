@@ -1,5 +1,5 @@
 from channels import route
-from sockets.consumers import save_post, connect_blog
+from sockets.consumers import save_post, connect_chat, disconnect_chat
 
 
 # The channel routing defines what channels get handled by what consumers,
@@ -8,10 +8,10 @@ from sockets.consumers import save_post, connect_blog
 # class itself specifies what channels it wants to consume)
 channel_routing = [
     # Called when incoming WebSockets connect - liveblog
-    route("websocket.connect", connect_blog, path=r'^/(?P<code>[a-zA-Z]{4})/stream/$'),
+    route("websocket.connect", connect_chat, path=r'^/(?P<code>[a-zA-Z]{4})/stream/$'),
 
     # Called when the client closes the socket - liveblog
-    # route("websocket.disconnect", disconnect_blog, path=r'^(?P<code>[a-zA-Z]{4})/stream/$'),
+    route("websocket.disconnect", disconnect_chat, path=r'^(?P<code>[a-zA-Z]{4})/stream/$'),
 
     # Called when the client sends message on the WebSocket - liveblog
     route("websocket.receive", save_post, path=r'^/(?P<code>[a-zA-Z]{4})/stream/$'),

@@ -11,9 +11,9 @@
     <br>
     <h2>Users:</h2>
 
-    <ol>
-    {% for user in room.guests.all %}
-        <li>{{ user.user }}</li>
+    <ol id="guest-list">
+    {% for guest in room.guests.all %}
+        <li>{{ guest.user }}</li>
     {% endfor %}
     </ol>
 </div>
