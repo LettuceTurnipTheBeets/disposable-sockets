@@ -151,6 +151,8 @@ def registration(request):
                 obj = room.guests.create(
                     user=name,
                 )
+            #obj.drawing.height = 140
+            #obj.drawing.width = 80
 
             obj.drawing.save('{}-{}'.format(room_code, obj.user), File(img_io))
             print('file saved')

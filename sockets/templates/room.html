@@ -23,9 +23,12 @@
     <button id="chat_button" class="post-button">Enter</button>
 </div>
 
+{% load extras %}
+{% load staticfiles %}
     <div id="posts" style="overflow-y:scroll;height:500px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
+                <img src="{% get_profile_picture room.code text.name %}" width="80" height="140">
                 <h3>{{ text.message }}</h3>
                 {{ text.name}} - {{ text.time|date:"D d M g:i A" }}
             </div>
