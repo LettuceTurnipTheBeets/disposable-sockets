@@ -63,8 +63,8 @@
             console.log("Appended");
 
             // save blog post
-            $(".post-button").click(function(){
-                if($(".content-post").val() == "")
+            $("#chat_button").click(function(){
+                if($("#chat_button").val() == "")
                 {
                     alert("Empty text");
                 }
@@ -77,9 +77,15 @@
             });
 
             $("#post_drawing").click(function(){
-                var content = $(".content-post").val()
-                webSocketBridge.send({"post":content, "name":"{{ name }}"});
-                $(".content-post").val('');
+                //$("#signature-pad").show();
+                $("#signature-pad").css("visibility", "visible");
+                document.body.style.backgroundColor = "gray";
+                $("#test-div").show();
+            });
+
+            $("#back").click(function(){
+                $("#signature-pad").css("visibility", "hidden");
+                document.body.style.backgroundColor = "white";
             });
 
             $("#chat_input").keyup(function(event){

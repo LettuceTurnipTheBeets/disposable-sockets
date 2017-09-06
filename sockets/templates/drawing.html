@@ -11,19 +11,26 @@
   <link rel="stylesheet" type="text/css" href="{% static "css/signature-pad.css" %}" />
 </head>
   <input id="id_hidden_image" type="hidden" name="signatureHolder" value="0">
-  <div id="signature-pad" class="m-signature-pad">
+  <div id="signature-pad" class="m-signature-pad" style="visibility: hidden;">
     <div class="m-signature-pad--body">
       <canvas></canvas>
     </div>
     <div class="m-signature-pad--footer">
       <div class="description">Sign above</div>
       <div class="left">
+        <button id="back" type="button" class="button clear" data-action="back">Back</button>
+      </div>
+      <div class="center">
         <button type="button" class="button clear" data-action="clear">Clear</button>
       </div>
       <div class="right">
-        <input type="submit" class="button save" data-action="save-png">
+        <button type="button" class="button save" data-action="save">Enter</button>
       </div>
     </div>
+  </div>
+
+  <div id="test-div" style="display: none">
+    hey there
   </div>
 
   {% load staticfiles %}
