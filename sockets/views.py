@@ -129,15 +129,7 @@ def registration(request):
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
-            name = form.cleaned_data['name']
-            data_url_pattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
-            signature_url = request.POST.get("signatureHolder")
-            if(signature_url != '0'):
-                print('signature_url exists')
-            signature_data = data_url_pattern.match(signature_url).group(2)
-            signature_data = bytes(signature_data, 'UTF-8')
-            signature_data = decodestring(signature_data)
-            img_io = io.BytesIO(signature_data)
+            name = form.cleaned_data['name']       
             
             try:
                 room.guests.get(user=name)
@@ -151,12 +143,7 @@ def registration(request):
                 obj = room.guests.create(
                     user=name,
                 )
-            #obj.drawing.height = 140
-            #obj.drawing.width = 80
-
-            obj.drawing.save('{}-{}'.format(room_code, obj.user), File(img_io))
-            print('file saved')
- 
+             
             request.session[room.code] = form.cleaned_data['name']
             request.session.set_expiry(3600)
             # max_age depends on when the room expires
