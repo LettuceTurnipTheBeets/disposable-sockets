@@ -6,7 +6,8 @@ class Guest(models.Model):
     Guest model
     """
     room = models.ForeignKey('sockets.Room', db_column='room_id', related_name='guests')
-    user = models.CharField(max_length=40) 
+    user = models.CharField(max_length=40)
+    drawing = models.ImageField(upload_to='assets/images/', default='assets/images/no-img.jpg')    
 
     def __str__(self):
         return self.user

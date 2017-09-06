@@ -13,7 +13,6 @@ class Chat(models.Model):
     room = models.ForeignKey('sockets.Room', db_column='room_id', related_name='chat')
     name = models.CharField(max_length=40)
     message = models.TextField(max_length=140)
-    drawing = models.ImageField(upload_to='assets/images/', default='assets/images/no-img.jpg')
     time = models.DateTimeField(blank=False)
 
     def __str__(self):
@@ -31,6 +30,7 @@ class Chat(models.Model):
             "name": self.name,
             "message": self.message,
             "time": self.time.strftime("%a %d %b %-I:%M %p"),
+            "url": '/{}'.format(Guest.objects.get(user=self.name, room=self.room.id).drawing.url),
         }
         # Encode and send that message to the whole channels Group for our
         # liveblog. Note how you can send to a channel or Group from any part
