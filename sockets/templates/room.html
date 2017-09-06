@@ -18,10 +18,7 @@
     </ol>
 </div>
 
-{% include 'drawing.html' %}
-
 <div style="position:fixed;bottom:0">
-    <button id="post_drawing" class="post-button">Drawing</button>
     <input id="chat_input" type="text" class="content-post">
     <button id="chat_button" class="post-button">Enter</button>
 </div>
@@ -75,12 +72,6 @@
                     $(".content-post").val('');
                 }
             });
-
-            $("#post_drawing").click(function(){
-                    var content = $(".content-post").val()
-                    webSocketBridge.send({"post":content, "name":"{{ name }}"});
-                    $(".content-post").val('');
-            }
 
             $("#chat_input").keyup(function(event){
                 if(event.keyCode == 13){
