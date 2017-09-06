@@ -3,6 +3,10 @@ from channels import Group
 from sockets.models.rooms import Room
 from sockets.models.chat import Chat
 from sockets.helpers import now
+import re, io
+from base64 import decodestring
+from django.core.files import File
+import datetime
 
 def connect_chat(message, code):
     """
@@ -53,13 +57,28 @@ def disconnect_chat(message, code):
 def save_post(message, code):
     """
     Saves new post to the database.
-    """
-    post = json.loads(message['text'])['post']
+    """    
     room = Room.objects.get(code=code)
     name = json.loads(message['text'])['name']
 
-    room.chat.create(
-        message=post,
-        name=name,
-        time=now(),
-    )
+    post = json.loads(message['text'])['post']
+    if len(post) > 140:
+        data_url_pattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
+        post = data_url_pattern.match(post).group(2)
+        post = bytes(post, 'UTF-8')
+        post = decodestring(post)
+        img_io = io.BytesIO(post)
+
+        obj = room.chat.create(
+            name=name,
+            time=now(),
+        )
+        time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        obj.drawing.save('{}-{}-{}'.format(code, obj.name, time), File(img_io))
+        print('file saved')
+    else:
+        room.chat.create(
+            message=post,
+            name=name,
+            time=now(),
+        )

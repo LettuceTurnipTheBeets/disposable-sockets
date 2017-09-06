@@ -31,6 +31,7 @@ class Chat(models.Model):
             "name": self.name,
             "message": self.message,
             "time": self.time.strftime("%a %d %b %-I:%M %p"),
+            "drawing_url": self.drawing.url,
         }
         # Encode and send that message to the whole channels Group for our
         # liveblog. Note how you can send to a channel or Group from any part
