@@ -3,10 +3,10 @@
 {% block content %}
 
 <div>
-    Room Name:&nbsp;&nbsp;<b>{{ room.name }}</b><br>
-    Room Code:&nbsp;&nbsp;&nbsp;<b>{{ room.code }}</b><br>
-    ID:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ room.id }}</b><br>
-    User Name:&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ name }}</b><br>
+    Room Name:<b>{{ room.name }}</b><br>
+    Room Code:<b>{{ room.code }}</b><br>
+    ID:<b>{{ room.id }}</b><br>
+    User Name:<b>{{ name }}</b><br>
 
     <br>
     <h2>Users:</h2>
@@ -28,7 +28,7 @@
 
 {% load extras %}
 {% load staticfiles %}
-    <div id="posts" style="overflow-y:scroll;height:500px">
+    <div id="posts" style="overflow-y:scroll;height:700px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
                 {% if text.drawing.url != 'assets/images/no-img.jpg' %}
@@ -57,7 +57,7 @@
                     content = "<h3>" + data.message + "</h3>";
                 }
                 content = content + data.name + " - " + data.time;
-                console.log("content is created" + data.id + "\n" + data.message);
+
                 // See if there's a div to replace it in, or if we should add a new one
                 var existing = $("div[data-post-id=" + data.id + "]");
                 if (existing.length) {
@@ -72,7 +72,7 @@
             });
             console.log("Appended");
 
-            // save blog post
+            // save chat post
             $("#chat_button").click(function(){
                 if($("#chat_input").val() == "")
                 {
@@ -80,12 +80,13 @@
                 }
                 else
                 {
-                    var content = $(".content-post").val()
+                    var content = $(".content-post").val();
                     webSocketBridge.send({"post":content, "name":"{{ name }}"});
                     $(".content-post").val('');
                 }
             });
 
+            // show signature pad
             $("#chat_drawing").click(function(){
                 $("#chat_input").prop("disabled", true);
                 $("#chat_button").prop("disabled", true);
@@ -94,6 +95,7 @@
                 document.body.style.backgroundColor = "gray";
             });
 
+            // hide signature pad
             $("#back").click(function(){
                 $("#chat_input").prop("disabled", false);
                 $("#chat_button").prop("disabled", false);
@@ -102,12 +104,14 @@
                 document.body.style.backgroundColor = "white";
             });
 
+            // allow enter to complete the form
             $("#chat_input").keyup(function(event){
                 if(event.keyCode == 13){
                     $("#chat_button").click();
                 }
             });
 
+            // save drawing post
             $("#post_drawing").click(function(){
                 var content = $("#id_hidden_image").val()
                 webSocketBridge.send({"post":content, "name":"{{ name }}"});
@@ -119,6 +123,7 @@
                 signaturePad.clear();
             });
 
+            // move scrollbar to the bottom
             function updateScroll() {
                var element = document.getElementById("posts");
                element.scrollTop = element.scrollHeight;
