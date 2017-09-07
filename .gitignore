@@ -3,3 +3,4 @@ node_modules/
 assets/bundles
 assets/images
 *.save
+settings_secret.py

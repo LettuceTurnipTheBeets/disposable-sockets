@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+from settings_secret import *
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2i*4tob$9+)8(exg1%3&dsj=ko2e$7so0216x_(+*#+nox=46d'
+SECRET_KEY = SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['72.14.182.183']
+ALLOWED_HOSTS = [IP_ADDRESS]
 
 redis_host = os.environ.get('REDIS_HOST', 'localhost')
 
@@ -104,14 +104,7 @@ WSGI_APPLICATION = 'disposable.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'prod',
-	'USER': 'web',
-	'PASSWORD': 'L2*WQ%pu',
-	'HOST': 'localhost',
-	'PORT': '',
-    }
+    'default': MYSQL_DATABASE
 }
 
 
