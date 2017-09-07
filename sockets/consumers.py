@@ -2,6 +2,7 @@ import json
 from channels import Group
 from sockets.models.rooms import Room
 from sockets.models.chat import Chat
+from django.utils import timezone
 import re, io
 from base64 import decodestring
 from django.core.files import File
