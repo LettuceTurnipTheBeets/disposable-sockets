@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from sockets.helpers import now
 import re, io
 from base64 import decodestring
 from django.core.files import File
@@ -48,13 +47,12 @@ def index(request):
                 I'm querying the database every time because it may change before a 
                 successful code is generated.
                 """
-                                        
                 try:
                     obj = Room.objects.create(
                         admin=room_form.cleaned_data['username'],
                         name=room_form.cleaned_data['room_name'],
                         code=room_code,
-                        created=now(),
+                        created=timezone.now().replace(microsecond=0),
                     )
                     room_condition = False
                 except IntegrityError:
@@ -130,14 +128,18 @@ def registration(request):
         if form.is_valid():
             room = Room.objects.get(code=room_code)
             name = form.cleaned_data['name']       
-            
+            message = '{} is already in use.  Please enter a new name.'            
+
             try:
                 room.guests.get(user=name)
 
                 return render(
                     request,
-                    'registration.html',
-                    {'form': form, 'error_message': '{} is already in use.  Please enter a new name.'.format(form.cleaned_data['name']), 'room_code': room_code}
+                    'registration.html', {
+                    'form': form,
+                    'error_message': message.format(form.cleaned_data['name']),
+                    'room_code': room_code,
+                    }
                 )
             except ObjectDoesNotExist:
                 obj = room.guests.create(
