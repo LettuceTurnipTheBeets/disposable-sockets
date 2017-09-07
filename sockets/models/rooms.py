@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from sockets.choices import DURATION_CHOICES
 from channels import Group
 
 class Room(models.Model):
@@ -10,7 +11,19 @@ class Room(models.Model):
     description = models.TextField(blank=True)
     admin = models.CharField(max_length=20, blank=False)
     created = models.DateTimeField(blank=False)
+    #duration = models.IntegerField(default=3, choices=DURATION_CHOICES)
     name = models.CharField(max_length=40, blank=True)
+
+    """def expires(self):
+        temp = self.duration
+
+        if temp == 1:
+            return self.created + timedelta(hours=2)
+        elif temp == 2:
+            return self.created + timedelta(hours=6)
+        elif temp == 3:
+            return self.created + timedelta(hours=24)
+        return self.created + duration"""
 
     @property
     def group_name(self):
