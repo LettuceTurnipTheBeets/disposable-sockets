@@ -3,8 +3,8 @@ var clearButton = wrapper.querySelector("[data-action=clear]");
 var canvas = wrapper.querySelector("canvas");
 var signaturePad = new SignaturePad(canvas, {
     backgroundColor: "rgb(255,255,255)",
-    minWidth: 0.4,
-    maxWidth: 2,
+    minWidth: 0.5,
+    maxWidth: 2.5,
     dotSize: 1.2,
     onEnd: function () {
         signature = signaturePad.toDataURL("image/jpeg");

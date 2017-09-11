@@ -81,7 +81,7 @@
                     var content = $(".content-post").val();
                     webSocketBridge.send({"post":content, "name":"{{ name }}"});
                     $(".content-post").val('');
-                }
+                }  
             });
             // show signature pad
             $("#chat_drawing").click(function(){
@@ -90,6 +90,7 @@
                 $("#chat_drawing").prop("disabled", true);
                 $("#signature-pad").css("visibility", "visible");
                 document.body.style.backgroundColor = "gray";
+                updatePen();
             });
             // hide signature pad
             $("#back").click(function(){
@@ -118,9 +119,25 @@
             });
             // move scrollbar to the bottom
             function updateScroll() {
-               var element = document.getElementById("posts");
-               element.scrollTop = element.scrollHeight;
+                var element = document.getElementById("posts");
+                element.scrollTop = element.scrollHeight;
             }
+
+            function updatePen() {
+                var r = Math.floor(Math.random() * 256);
+                var g = Math.floor(Math.random() * 256);
+                var b = Math.floor(Math.random() * 256);
+                var dotSize = (Math.random() * 1) + 1;
+                var minWidth = (Math.random() * 1) + .5;
+                var maxWidth = (Math.random() * 5) + 1.5;
+                var sig = signaturePad;
+
+                sig.dotSize = dotSize;
+                sig.minWidth = minWidth;
+                sig.maxWidth = maxWidth;
+                sig.penColor = "rgb(" + r + "," + g + "," + b + ")";
+            }
+   
             // Helpful debugging
             webSocketBridge.socket.addEventListener('open', function() { console.log("Connected to notification socket"); });
             webSocketBridge.socket.addEventListener('close', function() { console.log("Disconnected to notification socket"); });
