@@ -149,3 +149,11 @@ STATICFILES_DIRS = (
     # This lets Django's collectstatic store webpack bundles
     os.path.join(BASE_DIR, 'assets'),
 )
+
+#STATIC_ROOT = '/www/sigchat.com/static'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
