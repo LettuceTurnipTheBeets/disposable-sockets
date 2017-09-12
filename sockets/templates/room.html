@@ -27,7 +27,7 @@
 </div>
 
 {% load extras %}
-{% load staticfiles %}
+{% load static %}
     <div id="posts" style="overflow-y:scroll;height:700px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">

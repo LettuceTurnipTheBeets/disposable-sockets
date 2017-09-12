@@ -13,7 +13,7 @@ class Chat(models.Model):
     room = models.ForeignKey('sockets.Room', db_column='room_id', related_name='chat')
     name = models.CharField(max_length=40)
     message = models.TextField(max_length=140)
-    drawing = models.ImageField(upload_to='assets/images/', default='assets/images/no-img.jpg')
+    drawing = models.ImageField(upload_to='static/images/', default='static/images/no-img.jpg')
     time = models.DateTimeField(blank=False)
 
     def __str__(self):
