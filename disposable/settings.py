@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -55,19 +54,11 @@ INSTALLED_APPS = [
     'channels',
     'sockets',
     'django_crontab',
-    'webpack_loader',
 ]
 
 CRONJOBS = [
     ('*/15 * * * *', 'sockets.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
 ]
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,15 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/assets/'
-
-STATICFILES_DIRS = (
-    # This lets Django's collectstatic store webpack bundles
-    os.path.join(BASE_DIR, 'assets'),
-)
-
-#STATIC_ROOT = '/www/sigchat.com/static'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
