@@ -1,0 +1,19 @@
+# located /var/nginx/sites-available/disposable-sockets
+
+server {
+    listen 80;
+    server_name 72.14.182.183;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        #alias  /home/corbe054/disposable-sockets/assets;
+        #alias /www/sigchat.com/static/;
+        root /home/corbe054/disposable-sockets/;
+    }
+
+    location / {
+        include         uwsgi_params;
+        uwsgi_pass      unix:/run/uwsgi/disposable-sockets.sock;
+    }
+}
