@@ -31,7 +31,7 @@
     <div id="posts" style="overflow-y:scroll;height:700px">
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
-                {% if text.drawing.url != 'assets/images/no-img.jpg' %}
+                {% if text.drawing.url != 'static/images/no-img.jpg' %}
                 <img src="/{{ text.drawing.url }}" width="420" height="240">
                 {% else %}
                 <h3>{{ text.message }}</h3>
@@ -51,7 +51,7 @@
                 console.log("Got message " + data);
                 // Create the inner content of the post div
                 var content = "";
-                if (data.drawing_url != 'assets/images/no-img.jpg') {
+                if (data.drawing_url != 'static/images/no-img.jpg') {
                     content = "<img src='/" + data.drawing_url + "' width='420' height='240'>";
                 } else {
                     content = "<h3>" + data.message + "</h3>";
