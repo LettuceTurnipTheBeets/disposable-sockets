@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    ('*/15 * * * *', 'sockets.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log')
+    ('*/15 * * * *', 'sockets.cron.delete_expired_rooms', '>> /tmp/delete_expired_rooms.log'),
 ]
 
 MIDDLEWARE = [

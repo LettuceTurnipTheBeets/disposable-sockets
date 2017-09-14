@@ -13,3 +13,9 @@ def delete_expired_rooms():
     for date in rooms:
         if now > date.expires():
             date.delete()
+
+"""def delete_expired_images():
+   Delete all images older than 1 day.  This is run as a cron job with the source below:
+   find '/home/corbe054/disposable-sockets/static/images/' -mtime +0 -type f -delete
+"""
+
