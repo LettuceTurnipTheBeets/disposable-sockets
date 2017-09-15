@@ -17,6 +17,7 @@ This app allows you to create disposable chat rooms where you can communicate in
 ## Extra
 
 The cron script that runs to cleanup old images is:
+
     find '/home/corbe054/disposable-sockets/static/images/' -mtime +0 -type f -delete
 
 The extras/ file contains nginx, uwsgi, and systemd config files that should be placed in their appropriate folders but are saved here for revisioning.
