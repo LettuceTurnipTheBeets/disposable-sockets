@@ -1,7 +1,7 @@
 """
 ASGI entrypoint file for default channel layer.
 Points to the channel layer configured as "default" so you can point
-ASGI applications at "multichat.asgi:channel_layer" as their channel layer.
+ASGI applications at "disposable.asgi:channel_layer" as their channel layer.
 """
 
 import os
