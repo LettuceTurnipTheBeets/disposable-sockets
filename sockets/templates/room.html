@@ -2,25 +2,27 @@
 
 {% block content %}
 
-<div>
-    Room Name:<b>{{ room.name }}</b><br>
-    Room Code:<b>{{ room.code }}</b><br>
-    ID:<b>{{ room.id }}</b><br>
-    User Name:<b>{{ name }}</b><br>
+<div class="jumbotron text-center">
+  {% if room.name %}
+  <h1>{{ room.name }}</h1>
+  {% else %}
+  <h1>Signature Chat</h1>
+  {% endif %}
+  <p><strong>{{ room.code }}</strong></p>
+</div>
 
-    <br>
-    <h2>Users:</h2>
-
-    <ol id="guest-list">
+<div class="container">
+    <h3>Users:</h3>
+    <ul class="list-group" id="guest-list">
     {% for guest in room.guests.all %}
-        <li>{{ guest.user }}</li>
+        <li class="list-group-item">{{ guest.user }}</li>
     {% endfor %}
-    </ol>
+    </ul>
 </div>
 
 {% include 'drawing.html' %}
 
-<div style="position:fixed;bottom:0">
+<div class="footer">
     <button id="chat_drawing" class="post-button">Drawing</button>
     <input id="chat_input" type="text" class="content-post" maxlength="140">
     <button id="chat_button" class="post-button">Enter</button>

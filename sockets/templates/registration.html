@@ -1,15 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Registration</h1>
 
-This appears to be your first time entering this room.  What is your name?
-{% if error_message %}
-<h3>{{ error_message }}</h3>
-{% endif %}
-    <form action="/registration/" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="hidden" name="room_code" value="{{ room_code }}">
-    </form>
+<div class="jumbotron text-center">
+  <h1>Signature Chat</h1>
+</div>
+
+<div class="container">
+  <h3>This appears to be your first time entering this room.  What is your name?</h3>
+  {% if error_message %}
+  <h3>{{ error_message }}</h3>
+  {% endif %}
+  <form class="form-horizontal" action="/registration/" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="id_name">Name:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="id_name" required placeholder="Name" name="name" minlength="1" maxlength="20">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Join</button>
+      </div>
+    </div>
+  <input type="hidden" name="room_code" value="{{ room_code }}">
+  </form>
+</div>
+
 {% endblock %}
