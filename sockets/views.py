@@ -96,6 +96,9 @@ def join(request):
                 room = Room.objects.get(code=code_form.cleaned_data['code'])
             except:
                 raise Http404
+
+            if code_form.cleaned_data['code'] != room.code:
+                raise Http404
             
             if room.code in request.session:          
                 return redirect('/{}/'.format(room.code))
