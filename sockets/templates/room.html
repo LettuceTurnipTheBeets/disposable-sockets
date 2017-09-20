@@ -31,7 +31,7 @@
         {% for text in room.chat.all %}
             <div class="post" data-post-id="{{ text.id }}">
                 {% if text.drawing.url != 'static/images/no-img.jpg' %}
-                <img src="/{{ text.drawing.url }}" width="420" height="240">
+                <img src="/{{ text.drawing.url }}" width="420" height="240" alt="{{ text.name }}-{{ text.time|date:'H:i:s' }}.jpg">
                 {% else %}
                 <h3>{{ text.message }}</h3>
                 {% endif %}

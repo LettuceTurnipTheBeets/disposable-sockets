@@ -16,7 +16,7 @@ This app allows you to create disposable chat rooms where you can communicate in
 
 ## Extra
 
-The cron script that runs to cleanup old images is:
+The cron script below runs to cleanup old images, and is located in cron.hourly/.
 
     find '/home/corbe054/disposable-sockets/static/images/' -mtime +0 -type f -delete
 
