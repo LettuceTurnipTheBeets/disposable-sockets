@@ -63,8 +63,7 @@ def index(request):
                 user=obj.admin,
             )            
             request.session[obj.code] = obj.admin
-            request.session.set_expiry(3600)
-            # max_age=86400 for a day 
+            request.session.set_expiry(86400) # session expires after 1 day
      
             return redirect('/{}'.format(obj.code))
 
@@ -150,11 +149,8 @@ def registration(request):
                 )
              
             request.session[room.code] = form.cleaned_data['name']
-            request.session.set_expiry(3600)
-            # max_age depends on when the room expires
-            # use the below code if/when a room lasts 1 day
-            # max_age =  (room.expires() - timezone.now()).seconds + 900
-            # the 900 is the script frequency 900 seconds = 15 minutes
+            max_age =  (room.expires() - timezone.now()).seconds + 900
+            request.session.set_expiry(max_age)
              
             return redirect('/{}/'.format(room.code))
 
