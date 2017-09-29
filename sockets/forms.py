@@ -1,5 +1,6 @@
 from django import forms
 from sockets.models.rooms import Room
+from django.core.exceptions import ObjectDoesNotExist
 
 class RoomForm(forms.Form):
     username = forms.CharField(min_length=1, max_length=20, strip=True, label='Username')
@@ -11,7 +12,15 @@ class CodeForm(forms.Form):
     def clean(self):
         cd = self.cleaned_data
 
-        if len(Room.objects.all().filter(code=cd['code'])) == 0:
+        good = False
+        try:
+            code = Room.objects.get(code=cd['code'])
+            if code.code == cd['code']:
+                good = True
+        except ObjectDoesNotExist:
+            pass
+
+        if not good:
             self.add_error('code', 'No room exists with that code.')
         return cd
 
