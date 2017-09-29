@@ -9,21 +9,6 @@ class RoomForm(forms.Form):
 class CodeForm(forms.Form):
     code = forms.CharField(min_length=4, max_length=4, required=True, label='Room Code')
 
-    def clean(self):
-        cd = self.cleaned_data
-
-        good = False
-        try:
-            code = Room.objects.get(code=cd['code'])
-            if code.code == cd['code']:
-                good = True
-        except ObjectDoesNotExist:
-            pass
-
-        if not good:
-            self.add_error('code', 'No room exists with that code.')
-        return cd
-
 class NameForm(forms.Form):
     name = forms.CharField(min_length=1, max_length=20, required=True, label='Name')
 

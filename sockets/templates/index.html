@@ -12,6 +12,9 @@
 
 
   <h3>Have a room code?  Enter it here.</h3>
+  {% if error_message %}
+    <p><font color="red">{{ error_message }}</font></p>
+  {% endif %}
   <form class="form-horizontal" action="/join/" method="POST">
     {% csrf_token %}
     <div class="form-group">

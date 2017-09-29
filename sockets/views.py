@@ -78,6 +78,7 @@ def index(request):
             'code_form': code_form,
             'total': total,
             'total_hours': total_hours,
+            'error_message': '',
         }
     )
 
@@ -91,21 +92,45 @@ def join(request):
         code_form = CodeForm(request.POST)
         
         if code_form.is_valid():
+            good = False
+            message = '{} is not a valid room code'
+
             try:
                 room = Room.objects.get(code=code_form.cleaned_data['code'])
+                if code_form.cleaned_data['code'] == room.code:
+                    good = True
             except:
-                raise Http404
+                pass
 
-            if code_form.cleaned_data['code'] != room.code:
-                raise Http404
-            
+            if not good:
+                try:
+                    total = Room.objects.first().id
+                except AttributeError:
+                    total = 0
+
+                total_hours = Room.objects.count() * 24 
+
+                return render(
+                    request,
+                    'index.html', {
+                        'room_form': room_form,
+                        'code_form': code_form,
+                        'total': total,
+                        'total_hours': total_hours,
+                        'error_message': message.format(code_form.cleaned_data['code']),
+                    }
+                ) 
+
             if room.code in request.session:          
                 return redirect('/{}/'.format(room.code))
             else:
                 return render(
                     request,
-                    'registration.html',
-                    {'form': NameForm(), 'room_code': room.code}
+                    'registration.html', {
+                        'form': NameForm(),
+                        'room_code': room.code,
+                        'error_message': '',
+                    }
                 )
     else:
         code_form  = CodeForm()
