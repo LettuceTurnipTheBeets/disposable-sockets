@@ -25,7 +25,7 @@ SECRET_KEY = SECRET
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [IP_ADDRESS]
+ALLOWED_HOSTS = HOSTS
 
 redis_host = os.environ.get('REDIS_HOST', 'localhost')
 

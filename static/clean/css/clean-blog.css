@@ -295,57 +295,9 @@ footer {
     margin-bottom: 0;
     text-align: center; }
 
-.btn {
-  font-size: 14px;
-  font-weight: 800;
-  padding: 15px 25px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border-radius: 0;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+/* use this to change button color
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #8064A2 !important;
+}*/
 
-.btn-primary {
-  color: white;
-  border-color: #0085A1;
-  background-color: #0085A1; }
-  .btn-primary.focus, .btn-primary:focus {
-    color: white;
-    border-color: #001c22;
-    background-color: #005b6e; }
-  .btn-primary:hover {
-    color: white;
-    border-color: #005264;
-    background-color: #005b6e; }
-  .btn-primary.active, .btn-primary:active,
-  .open > .btn-primary.dropdown-toggle {
-    color: white;
-    border-color: #005264;
-    background-color: #005b6e; }
-    .btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover,
-    .open > .btn-primary.dropdown-toggle.focus,
-    .open > .btn-primary.dropdown-toggle:focus,
-    .open > .btn-primary.dropdown-toggle:hover {
-      color: white;
-      border-color: #001c22;
-      background-color: #003d4a; }
-  .btn-primary.active, .btn-primary:active,
-  .open > .btn-primary.dropdown-toggle {
-    background-image: none; }
-  .btn-primary.disabled.focus, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled].focus, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover,
-  fieldset[disabled] .btn-primary.focus,
-  fieldset[disabled] .btn-primary:focus,
-  fieldset[disabled] .btn-primary:hover {
-    border-color: #0085A1;
-    background-color: #0085A1; }
-  .btn-primary .badge {
-    color: #0085A1;
-    background-color: white; }
 
-.btn-lg {
-  font-size: 16px;
-  padding: 25px 35px; }
-
-.btn-default:focus, .btn-default:hover {
-  color: white;
-  border: 1px solid #0085A1;
-  background-color: #0085A1; }

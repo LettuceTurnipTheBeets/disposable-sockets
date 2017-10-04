@@ -2,31 +2,36 @@
 
 {% block content %}
 
-<div class="jumbotron text-center">
-  {% if room.name %}
-  <h1>{{ room.name }}</h1>
-  {% else %}
-  <h1>Signature Chat</h1>
-  {% endif %}
-  <p><strong>{{ room.code }}</strong></p>
-</div>
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('http://www.signaturechat.com/static/clean/img/post-bg.jpg')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="site-heading">
+              {% if room.name %}
+              <span class="subheading">{{ room.name }}</span>
+              {% else %}
+              <span class="subheading">Signature Chat</span>
+              {% endif %}
+              <span class="subheading">{{ room.code }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<div class="container">
-    <h3>Users:</h3>
-    <ul class="list-group" id="guest-list">
-    {% for guest in room.guests.all %}
-        <li class="list-group-item">{{ guest.user }}</li>
-    {% endfor %}
-    </ul>
-</div>
+    <!-- Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+        <h4>Users:</h4>
+        <ul class="list-group" id="guest-list">
+        {% for guest in room.guests.all %}
+          <li class="list-group-item">{{ guest.user }}</li>
+        {% endfor %}
+        </ul>
 
 {% include 'drawing.html' %}
-
-<div class="chat-footer">
-    <button id="chat_drawing" class="post-button">Drawing</button>
-    <input id="chat_input" type="text" class="content-post" maxlength="140">
-    <button id="chat_button" class="post-button">Enter</button>
-</div>
 
 {% load static %}
     <div id="posts" style="overflow-y:scroll;height:700px">
@@ -35,12 +40,27 @@
                 {% if text.drawing.url != 'static/images/no-img.jpg' %}
                 <img src="/{{ text.drawing.url }}" width="420" height="240" alt="{{ text.name }}-{{ text.time|date:'H:i:s' }}.jpg">
                 {% else %}
-                <h3>{{ text.message }}</h3>
+                <h4>{{ text.message }}</h4>
                 {% endif %}
                 {{ text.name }} - {{ text.time|date:"D d M g:i A" }}
             </div>
         {% endfor %}
     </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="mx-auto chat-footer">
+              <button id="chat_drawing" class="post-button">Drawing</button>
+              <input id="chat_input" type="text" class="content-post" minlength="1" maxlength="140">
+              <button id="chat_button" class="post-button">&nbsp;&nbsp;Enter&nbsp;&nbsp;</button>
+          </div>
+        </div>
+      </div>
 
     <script>
         $(function () {
@@ -55,7 +75,7 @@
                 if (data.drawing_url != 'static/images/no-img.jpg') {
                     content = "<img src='/" + data.drawing_url + "' width='420' height='240'>";
                 } else {
-                    content = "<h3>" + data.message + "</h3>";
+                    content = "<h4>" + data.message + "</h4>";
                 }
                 content = content + data.name + " - " + data.time;
                 // See if there's a div to replace it in, or if we should add a new one
@@ -128,8 +148,8 @@
                 var r = Math.floor(Math.random() * 256);
                 var g = Math.floor(Math.random() * 256);
                 var b = Math.floor(Math.random() * 256);
-                var dotSize = (Math.random() * 1) + 1;
-                var minWidth = (Math.random() * 1) + .5;
+                var dotSize = (Math.random() * 1) + 1.25;
+                var minWidth = (Math.random() * 1) + .75;
                 var maxWidth = (Math.random() * 5) + 1.5;
                 var sig = signaturePad;
 
