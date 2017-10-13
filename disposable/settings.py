@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = HOSTS
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 redis_host = os.environ.get('REDIS_HOST', 'localhost')
 
 # Channel layer definitions
