@@ -2,7 +2,7 @@
 
 server {
     listen 80;
-    server_name www.signaturechat.com;    
+    server_name signaturechat.com www.signaturechat.com;    
 
     access_log /var/log/nginx/disposable-sockets/access.log;
     error_log /var/log/nginx/disposable-sockets/error.log;
@@ -33,4 +33,15 @@ server {
         include         uwsgi_params;
         uwsgi_pass      unix:/run/uwsgi/disposable-sockets.sock;
     }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/www.signaturechat.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/www.signaturechat.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+
+
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
 }
