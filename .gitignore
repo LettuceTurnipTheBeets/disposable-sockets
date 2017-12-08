@@ -2,3 +2,4 @@
 static/images
 settings_secret.py
 disposable/static
+django_error_logs/

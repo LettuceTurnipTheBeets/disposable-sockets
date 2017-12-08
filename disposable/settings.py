@@ -123,6 +123,37 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '\n%(asctime)-.19s [%(levelname)s] module=%(module)s process=%(process)d thread=%(thread)d\n%(message)s'
+        },
+        'simple': {
+            'format': '\n%(asctime)-.19s [%(levelname)s]\n%(message)s'
+        },
+    },
+    'handlers': {
+        'logfile': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/home/corbe054/disposable-sockets/django-error-logs/error.log',
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*2, # 2 MB
+            'backupCount': 10,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
