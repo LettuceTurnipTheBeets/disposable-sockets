@@ -1,0 +1,11 @@
+uwsgi:
+    socket: /uwsgi-sockets/disposable-sockets.sock
+    master: true
+    processes: 4
+    threads: 2
+    single-interpreter: true
+    chdir: /home/corbe054/disposable-sockets/
+    wsgi-file: /home/corbe054/disposable-sockets/disposable/wsgi.py
+    virtualenv: /var/env/disposable
+    buffer-size: 8192
+    plugin: python35

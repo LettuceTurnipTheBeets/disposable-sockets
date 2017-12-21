@@ -1,4 +1,4 @@
-# located /var/nginx/sites-available/disposable-sockets
+# located /etc/nginx/sites-available/disposable-sockets
 
 server {
     listen 80;
@@ -35,7 +35,7 @@ server {
     
     location / {
         include         uwsgi_params;
-        uwsgi_pass      unix:/run/uwsgi/disposable-sockets.sock;
+        uwsgi_pass      unix:/uwsgi-sockets/disposable-sockets.sock;
     }
 
     listen 443 ssl; # managed by Certbot
