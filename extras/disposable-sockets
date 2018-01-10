@@ -2,7 +2,7 @@
 
 server {
     listen 80;
-    server_name signaturechat.com www.signaturechat.com;    
+    server_name www.signaturechat.com;    
 
     access_log /var/log/disposable-sockets/nginx_access.log;
     error_log /var/log/disposable-sockets/nginx_error.log;
