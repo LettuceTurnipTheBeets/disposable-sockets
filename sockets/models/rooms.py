@@ -3,9 +3,7 @@ from datetime import datetime, timedelta
 from channels import Group
 
 class Room(models.Model):
-    """
-    Room model
-    """
+    """Room model"""
     code = models.CharField(max_length=4, blank=False, unique=True)
     description = models.TextField(blank=True)
     admin = models.CharField(max_length=20, blank=False)
@@ -14,8 +12,8 @@ class Room(models.Model):
 
     @property
     def group_name(self):
-        """
-        Returns the Channels Group name to use for sending notifications.
+        """Returns the Channels Group name to use for sending
+           notifications.
         """
         return "room-%s" % self.id
 

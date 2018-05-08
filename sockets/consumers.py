@@ -9,20 +9,18 @@ from django.core.files import File
 import datetime
 
 def connect_chat(message, code):
-    """
-    When the user opens a WebSocket to a room stream, adds them to the
-    group for that stream so they receive new post notifications.
-    The notifications are actually sent in the Post model on save.
+    """When the user opens a WebSocket to a room stream, adds them to the
+       group for that stream so they receive new post notifications.
+       The notifications are actually sent in the Post model on save.
     """
     # Try to fetch the room by code; if that fails, close the socket.
     try:
         room = Room.objects.get(code=code)
     except Room.DoesNotExist:
-        """
-        You can see what messages back to a WebSocket look like in the spec:
-        http://channels.readthedocs.org/en/latest/asgi.html#send-close
-        Here, we send "close" to make Daphne close off the socket, and some
-        error text for the client.
+        """You can see what messages back to a WebSocket look like in the spec:
+           http://channels.readthedocs.org/en/latest/asgi.html#send-close
+           Here, we send "close" to make Daphne close off the socket, and some
+           error text for the client.
         """
         message.reply_channel.send({
             # WebSockets send either a text or binary payload each frame.
@@ -32,20 +30,18 @@ def connect_chat(message, code):
         })
         return
     message.reply_channel.send({"accept": True})
-    """
-    Each different client has a different "reply_channel", which is how you
-    send information back to them. We can add all the different reply channels
-    to a single Group, and then when we send to the group, they'll all get the
-    same message.
+    """Each different client has a different "reply_channel", which is how you
+       send information back to them. We can add all the different reply channels
+       to a single Group, and then when we send to the group, they'll all get the
+       same message.
     """
     Group(room.group_name).add(message.reply_channel)
 
 
 def disconnect_chat(message, code):
-    """
-    Removes the user from the room group when they disconnect.
-    Channels will auto-cleanup eventually, but it can take a while, and having old
-    entries cluttering up your group will reduce performance.
+    """Removes the user from the room group when they disconnect.
+       Channels will auto-cleanup eventually, but it can take a while, and having old
+       entries cluttering up your group will reduce performance.
     """
     try:
         room = Room.objects.get(code=code)
@@ -59,13 +55,12 @@ def disconnect_chat(message, code):
 
 
 def save_post(message, code):
-    """
-    Saves new post to the database.
-    """    
+    """Saves new post to the database."""
     room = Room.objects.get(code=code)
     name = json.loads(message['text'])['name']
     post = json.loads(message['text'])['post']
     now = timezone.now().replace(microsecond=0)
+
     if len(post) > 140:
         data_url_pattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
         post = data_url_pattern.match(post).group(2)
@@ -86,3 +81,4 @@ def save_post(message, code):
             name=name,
             time=now,
         )
+

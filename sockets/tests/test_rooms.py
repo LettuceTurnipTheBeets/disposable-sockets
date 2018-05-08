@@ -1,9 +1,10 @@
 from django.test import TestCase
-from sockets.models.rooms import Room
 from django.utils import timezone
+from sockets.models.rooms import Room
 
 
 class RoomTestCase(TestCase):
+    """Test the disposable chat rooms"""
     def setUp(self):
         Room.objects.create(
             admin="Test Admin 1",

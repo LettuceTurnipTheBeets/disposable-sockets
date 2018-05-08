@@ -7,9 +7,7 @@ import json
 
 
 class Chat(models.Model):
-    """
-    Chat model
-    """
+    """Chat model"""
     room = models.ForeignKey('sockets.Room', db_column='room_id', related_name='chat')
     name = models.CharField(max_length=40)
     message = models.TextField(max_length=140)
@@ -20,9 +18,8 @@ class Chat(models.Model):
         return self.message
     
     def send_notification(self):
-        """
-        Sends a notification to everyone in our Liveblog's group with our
-        content.
+        """Sends a notification to everyone in our Liveblog's group with our
+           content.
         """
         # Make the payload of the notification. We'll JSONify this, so it has
         # to be simple types, which is why we handle the datetime here.
@@ -42,9 +39,8 @@ class Chat(models.Model):
         })
 
     def save(self, *args, **kwargs):
-        """
-        Hooking send_notification into the save of the object as I'm not
-        the biggest fan of signals.
+        """Hooking send_notification into the save of the object as I'm not
+           the biggest fan of signals.
         """
         result = super(Chat, self).save(*args, **kwargs)
         self.send_notification()

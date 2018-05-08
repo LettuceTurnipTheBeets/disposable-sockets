@@ -14,6 +14,16 @@ The server is running the following technologies:
 
 This app allows you to create disposable chat rooms where you can communicate in real-time via text chat or signatures.  The chat rooms last for 24 hours and nothing is saved after the chat room disappears.
 
+## Requirements
+
+asgi-redis 1.4.2  
+channels 1.1.6  
+Django 1.11.3  
+django-crontab 0.7.1  
+mysqlclient 1.3.10  
+pytz 2017.2  
+Pillow 4.2.1  
+
 ## Extra
 
 The cron script below runs to cleanup old images, and is located in cron.hourly/.

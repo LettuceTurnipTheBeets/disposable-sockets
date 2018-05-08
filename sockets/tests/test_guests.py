@@ -1,10 +1,11 @@
 from django.test import TestCase
+from django.utils import timezone
 from sockets.models.rooms import Room
 from sockets.models.guests import Guest
-from django.utils import timezone
 
 
-class RoomTestCase(TestCase):
+class GuestTestCase(TestCase):
+    """Test the guests that are registered to a room"""
     def setUp(self):
         room = Room.objects.create(
             admin="Test Guests 1",

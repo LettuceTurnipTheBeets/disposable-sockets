@@ -9,15 +9,14 @@ from datetime import datetime, timedelta
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-import re, io
+import re
+import io
 from base64 import decodestring
 from django.core.files import File
 
 
 def index(request):
-    """
-    Index/Home/Landing Page
-    """
+    """Index/Home/Landing Page"""
     code_form = CodeForm()
     try:
         total = Room.objects.first().id
@@ -42,10 +41,9 @@ def index(request):
                     next_index = random.randrange(len(room_alphabet))
                     room_code = room_code + room_alphabet[next_index]
 
-                """
-                Check that the room code is unique.
-                I'm querying the database every time because it may change before a 
-                successful code is generated.
+                """Check that the room code is unique.
+                   I'm querying the database every time because it may change before a 
+                   successful code is generated.
                 """
                 try:
                     obj = Room.objects.create(
@@ -58,7 +56,6 @@ def index(request):
                 except IntegrityError:
                     pass
 
-            print ('Create room '.format(room_code))
             obj.guests.create(
                 user=obj.admin,
             )            
@@ -83,9 +80,7 @@ def index(request):
     )
 
 def join(request):
-    """
-    Join Endpoint
-    """
+    """Join Endpoint"""
     room_form = RoomForm()
 
     if request.method == 'POST':
@@ -144,13 +139,10 @@ def join(request):
     )
 
 def registration(request):
-    """
-    Registration Page
-    """  
+    """Registration Page"""  
     if request.method == 'POST':
         form = NameForm(request.POST)
         room_code = request.POST.get('room_code')
-        print(room_code)
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
@@ -194,18 +186,14 @@ def registration(request):
     )  
 
 def about(request):
-    """
-    About Page
-    """
+    """About Page"""
     return render(
         request,
         'about.html'
     )
 
 def room(request, code):
-    """
-    Room Detail Page
-    """
+    """Room Detail Page"""
     try:
         room = Room.objects.get(code=code)
     except IndexError:
@@ -226,4 +214,5 @@ def room(request, code):
             'name': name,
             'chat_form': ChatForm(),
         }
-    )    
+    )
+

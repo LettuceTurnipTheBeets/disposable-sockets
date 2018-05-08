@@ -1,11 +1,12 @@
 from django.test import TestCase
+from django.utils import timezone
 from sockets.models.rooms import Room
 from sockets.models.guests import Guest
 from sockets.models.chat import Chat
-from django.utils import timezone
 
 
-class RoomTestCase(TestCase):
+class ChatTestCase(TestCase):
+    """Test the real-time chat"""
     def setUp(self):
         room = Room.objects.create(
             admin="Test Chat 1",
@@ -45,3 +46,4 @@ class RoomTestCase(TestCase):
         self.assertEqual(Chat.objects.all()[0].name, 'Jake')
         self.assertEqual(Chat.objects.all()[1].name, 'Test Chat 1')
         self.assertEqual(Chat.objects.count(), 2)
+
