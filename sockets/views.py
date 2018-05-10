@@ -79,6 +79,7 @@ def index(request):
         }
     )
 
+
 def join(request):
     """Join Endpoint"""
     room_form = RoomForm()
@@ -138,6 +139,7 @@ def join(request):
         },
     )
 
+
 def registration(request):
     """Registration Page"""  
     if request.method == 'POST':
@@ -146,7 +148,7 @@ def registration(request):
 
         if form.is_valid():
             room = Room.objects.get(code=room_code)
-            name = form.cleaned_data['name']       
+            name = form.cleaned_data['name']
             message = '{} is already in use.  Please enter a new name.'            
 
             try:
@@ -185,12 +187,14 @@ def registration(request):
         }
     )  
 
+
 def about(request):
     """About Page"""
     return render(
         request,
         'about.html'
     )
+
 
 def room(request, code):
     """Room Detail Page"""

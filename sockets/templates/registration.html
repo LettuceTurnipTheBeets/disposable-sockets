@@ -26,7 +26,7 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="id_name">Name:</label>
-            <input type="text" class="form-control" id="id_name" aria-describedby="nameHelp" placeholder="Enter Name">
+            <input type="text" class="form-control" id="id_name" name="name" aria-describedby="nameHelp" placeholder="Enter Name">
             <small id="emailHelp" class="form-text text-muted">Name must be unique</small>
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
