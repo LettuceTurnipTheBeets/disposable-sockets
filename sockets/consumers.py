@@ -74,7 +74,6 @@ def save_post(message, code):
         )
         time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         obj.drawing.save('{}-{}-{}'.format(code, obj.name, time), File(img_io))
-        print('file saved')
     else:
         room.chat.create(
             message=post,
