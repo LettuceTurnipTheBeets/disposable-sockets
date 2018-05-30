@@ -1,18 +1,14 @@
 # disposable-sockets
 
-This repository represents the full site content.
+This app allows you to create disposable chat rooms where you can communicate in real-time via text chat or signatures.  The chat rooms last for 24 hours and nothing is saved after the chat room disappears.
 
 ## Code
 
 This site is developed primarily in JQuery and Bootstrap for the front-end and Python/Django/Django-Channels for the back-end.
 
-## Technologies
+## Websockets
 
-The server is running the following technologies:
-
-- Websockets
-
-This app allows you to create disposable chat rooms where you can communicate in real-time via text chat or signatures.  The chat rooms last for 24 hours and nothing is saved after the chat room disappears.
+The server is leveraging websockets through django-channels.
 
 ## Requirements
 
@@ -28,7 +24,7 @@ Pillow 4.2.1
 
 The cron script below runs to cleanup old images, and is located in cron.hourly/.
 
-    find '/home/corbe054/disposable-sockets/static/images/' -mtime +0 -type f -delete
+    find '~/disposable-sockets/static/images/' -mtime +0 -type f -delete
 
 The extras/ file contains nginx, uwsgi, and systemd config files that should be placed in their appropriate folders but are saved here for revisioning.
 
