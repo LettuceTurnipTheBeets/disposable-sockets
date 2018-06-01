@@ -89,8 +89,8 @@
                 }
             });
 
+            // save chat post
             $("#chat_button").click(function(){
-                // save chat post
                 if($("#chat_input").val() == "")
                 {
                     alert("Empty text");
@@ -103,8 +103,8 @@
                 }  
             });
 
+            // show signature pad
             $("#chat_drawing").click(function(){
-                // show signature pad
                 $("#chat_input").prop("disabled", true);
                 $("#chat_button").prop("disabled", true);
                 $("#chat_drawing").prop("disabled", true);
@@ -113,8 +113,8 @@
                 updatePen();
             });
 
+            // hide signature pad
             $("#back").click(function(){
-                // hide signature pad
                 $("#chat_input").prop("disabled", false);
                 $("#chat_button").prop("disabled", false);
                 $("#chat_drawing").prop("disabled", false);
@@ -122,15 +122,15 @@
                 document.body.style.backgroundColor = "white";
             });
 
+            // allow enter to complete the form
             $("#chat_input").keyup(function(event){
-                // allow enter to complete the form
                 if(event.keyCode == 13){
                     $("#chat_button").click();
                 }
             });
 
+            // save drawing post
             $("#post_drawing").click(function(){
-                // save drawing post
                 var content = $("#id_hidden_image").val()
                 webSocketBridge.send({"post":content, "name":"{{ name }}"});
                 $("#chat_input").prop("disabled", false);
@@ -141,14 +141,14 @@
                 signaturePad.clear();
             });
 
+            // move scrollbar to the bottom
             function updateScroll() {
-                // move scrollbar to the bottom
                 var element = document.getElementById("posts");
                 element.scrollTop = element.scrollHeight;
             }
 
+            // update pen with random color and size
             function updatePen() {
-                // update pen with random color and size
                 var r = Math.floor(Math.random() * 256);
                 var g = Math.floor(Math.random() * 256);
                 var b = Math.floor(Math.random() * 256);
